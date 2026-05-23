@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>🐾 동물 시각 탐험대</title>
+  <title>🐾 동물 시각 탐험대 </title>
   <style>
     :root {
       --glass: rgba(255, 255, 255, 0.68);
@@ -106,6 +106,35 @@
       letter-spacing: -0.05em;
       color: #ff8f00;
       text-shadow: 0 5px 0 rgba(255, 193, 7, 0.28), 0 12px 28px rgba(255, 152, 0, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.14em;
+      flex-wrap: nowrap;
+    }
+
+    .title-lines {
+      display: inline-block;
+    }
+
+    .title-paw {
+      appearance: none;
+      -webkit-appearance: none;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      line-height: 1;
+      cursor: pointer;
+      filter: drop-shadow(0 5px 0 rgba(255, 193, 7, 0.20));
+      transform: translateY(-0.04em);
+    }
+
+    .title-paw:focus-visible {
+      outline: 4px solid rgba(102, 187, 106, 0.55);
+      outline-offset: 6px;
+      border-radius: 18px;
     }
 
     .subtitle {
@@ -189,6 +218,49 @@
 
     .camera-video {
       display: none;
+    }
+
+    .survival-mission, .parent-question-box {
+      width: min(100%, 840px);
+      padding: 10px 14px;
+      border-radius: 18px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.78), rgba(232,245,233,0.64));
+      border: 1px solid rgba(102, 187, 106, 0.35);
+      color: #2e7d32;
+      font-weight: 900;
+      line-height: 1.35;
+      text-align: center;
+      box-shadow: 0 8px 18px rgba(80,70,40,0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      word-break: keep-all;
+    }
+
+    .survival-mission {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 8px;
+      font-size: clamp(0.86rem, 2.5vw, 1.02rem);
+    }
+
+    .survival-mission .mission-tag {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(102, 187, 106, 0.18);
+      color: #1b5e20;
+      white-space: nowrap;
+    }
+
+    .parent-question-box {
+      margin: 10px auto 12px;
+      background: linear-gradient(160deg, rgba(255,248,225,0.86), rgba(255,255,255,0.68));
+      border-color: rgba(255, 193, 7, 0.40);
+      color: #6d4c41;
+    }
+
+    .parent-question-box strong {
+      color: #ef6c00;
     }
 
     .eye-card .card-row {
@@ -667,6 +739,7 @@
       .animal-tabs { gap: 5px; }
       .animal-chip { padding: 7px 9px; }
       .tip { min-height: 30px; padding: 7px 10px; }
+      .survival-mission { grid-template-columns: 1fr; gap: 4px; padding: 8px 10px; }
       .glass-card { border-radius: 26px; }
       .mode-actions .primary-btn { width: min(100%, 310px); }
     }
@@ -677,15 +750,14 @@
     <div class="shell">
       <section id="menuScreen" class="screen">
         <div class="glass-card">
-          <h1 class="title">🐾 동물 시각 탐험대</h1>
-          <p class="subtitle">동물의 눈으로 세상을 보며 목표물을 찾는 과학 탐험 게임이에요. 배경과 아이콘이 한 캔버스에서 함께 왜곡됩니다.</p>
+          <h1 class="title"><button id="settingsBtn" class="title-paw" type="button" aria-label="보호자 설정 열기">🐾</button><span class="title-lines">동물 시각 탐험대</span></h1>
+          <p class="subtitle">동물의 눈으로 세상을 보며 생존 미션을 해결하는 과학 탐험 게임이에요. 이 베타에는 사람·개·고양이를 따뜻한 온기로 표현하는 AI 의사 열화상 실험 모드가 포함되어 있어요.</p>
           <p class="science-note">※ 이 앱은 동물의 감각을 100% 재현하는 장비가 아니라, 핵심 원리를 어린이가 이해하기 쉽게 바꿔 보여주는 교육용 시뮬레이션입니다.</p>
-          <div class="privacy-box"><strong>카메라 안전 안내:</strong> 라이브 동물 눈 모드의 카메라 영상은 저장하지 않고, 서버로 보내지 않으며, 이 기기 안에서만 필터로 바뀝니다.</div>
-          <div id="menuAnimals" class="menu-animals" aria-label="동물 선택"></div>
+          <div class="privacy-box"><strong>카메라 안전 안내:</strong> 라이브 동물 눈 모드의 카메라 영상은 저장하지 않고, 서버로 보내지 않으며, 이 기기 안에서만 필터로 바뀝니다. AI 실험 모드는 TensorFlow.js 모델을 불러와 사람·개·고양이만 이 기기 안에서 추정합니다.</div>
+          <div id="menuAnimals" class="menu-animals hidden" aria-label="동물 선택" aria-hidden="true"></div>
           <div class="mode-actions">
             <button id="startBtn" class="primary-btn" type="button">탐험 시작!</button>
             <button id="cameraBtn" class="primary-btn secondary-btn" type="button">📷 라이브 동물 눈</button>
-            <button id="settingsBtn" class="primary-btn secondary-btn" type="button">⚙ 보호자 설정</button>
           </div>
           <div id="versionPill" class="version-pill">Beta</div>
         </div>
@@ -702,6 +774,7 @@
           <div id="scoreBadge" class="badge">⭐ 0점</div>
         </div>
         <div id="animalTabs" class="animal-tabs" aria-label="동물 시야 선택"></div>
+        <div id="survivalMission" class="survival-mission" aria-live="polite"><span class="mission-tag">오늘의 생존 미션</span><span id="survivalMissionText">동물의 감각으로 살아남는 방법을 찾아요.</span></div>
         <div class="canvas-frame">
           <canvas id="gameCanvas" width="800" height="600" role="img" aria-label="동물 시각 필터가 적용된 탐험 게임 화면"></canvas>
           <div id="pauseOverlay" class="pause-overlay hidden">⏸ 쉬는 중</div>
@@ -715,7 +788,7 @@
           <button id="gameFullscreenBtn" class="mini-btn" type="button">⛶ 전체화면</button>
           <button id="settingsGameBtn" class="mini-btn" type="button">⚙ 설정</button>
           <span id="qualityBadge" class="status-pill">⚡ Auto</span>
-          <span id="fpsBadge" class="status-pill">FPS --</span>
+          <span id="fpsBadge" class="status-pill" hidden aria-hidden="true"></span>
         </div>
       </section>
 
@@ -730,7 +803,7 @@
           <video id="cameraVideo" class="camera-video" playsinline autoplay muted></video>
         </div>
         <div id="cameraStatus" class="tip">카메라 권한을 허용하면 실제 주변 장면에 동물 시야 필터를 씌워 볼 수 있어요.</div>
-        <div id="cameraScienceNote" class="science-note auto-hide-note">※ 카메라 모드는 교육용 시뮬레이션입니다. 휴대폰 카메라는 실제 자외선이나 적외선 열을 직접 보여주지 못하므로, 벌의 UV와 뱀의 열화상은 화면 신호를 이용한 비유 표현입니다.</div>
+        <div id="cameraScienceNote" class="science-note auto-hide-note">※ 카메라 모드는 교육용 시뮬레이션입니다. 휴대폰 카메라는 실제 자외선이나 적외선 열을 직접 보여주지 못합니다. AI 의사 열화상은 사람·개·고양이를 최대 3개까지 따뜻한 색으로 보여주는 실험 기능입니다.</div>
         <div class="result-actions">
           <button id="cameraStartBtn" class="small-btn" type="button">카메라 시작</button>
           <button id="cameraDemoBtn" class="small-btn" type="button">샘플 장면 보기</button>
@@ -741,10 +814,11 @@
           <button id="cameraHomeTopBtn" class="mini-btn" type="button">🏠 처음</button>
           <button id="cameraMuteBtn" class="mini-btn" type="button">🔊 소리</button>
           <button id="cameraCompareBtn" class="mini-btn" type="button">👦 비교</button>
+          <button id="cameraAiBtn" class="mini-btn" type="button">🧪 AI 온기</button>
           <button id="cameraFullscreenBtn" class="mini-btn" type="button">⛶ 전체화면</button>
           <button id="settingsCameraBtn" class="mini-btn" type="button">⚙ 설정</button>
           <span id="cameraQualityBadge" class="status-pill">⚡ Auto</span>
-          <span id="cameraFpsBadge" class="status-pill">FPS --</span>
+          <span id="cameraFpsBadge" class="status-pill" hidden aria-hidden="true"></span>
         </div>
       </section>
 
@@ -752,7 +826,8 @@
         <div class="glass-card result-card">
           <h1 class="title">🔍 탐험 완료!</h1>
           <div id="finalScore" class="score-pill">0점</div>
-          <h2 style="margin:0;color:#2e7d32;">서후의 비밀 눈 백과사전</h2>
+          <h2 style="margin:0;color:#2e7d32;">비밀 눈 백과사전</h2>
+          <div id="parentQuestionBox" class="parent-question-box"><strong>오늘 아이에게 물어보세요:</strong> 동물마다 세상을 다르게 보는 이유가 뭘까요?</div>
           <div id="eyeBook" class="eye-book"></div>
           <div class="result-actions">
             <button id="retryBtn" class="small-btn" type="button">다시 탐험</button>
@@ -772,6 +847,7 @@
       <p>이 기능은 주변 장면에 동물 눈 필터를 씌워 보는 교육용 놀이입니다.</p>
       <p><strong>카메라 영상은 저장하지 않고, 서버로 보내지 않으며, 이 기기 안에서만 필터로 바뀝니다.</strong></p>
       <p>뱀의 열화상과 벌의 UV는 실제 촬영이 아니라 과학 원리를 쉽게 보여주는 비유 표현입니다.</p>
+      <p>🧪 AI 의사 열화상은 TensorFlow.js COCO-SSD 모델로 사람·개·고양이를 최대 3개까지 찾습니다. 정확한 체온 측정이 아니며, 필요한 모델 파일은 처음 사용할 때 인터넷으로 불러옵니다.</p>
       <div class="modal-actions">
         <button id="cameraConsentAcceptBtn" class="small-btn" type="button">동의하고 시작</button>
         <button id="cameraConsentDemoBtn" class="small-btn" type="button">카메라 없이 샘플 보기</button>
@@ -790,9 +866,10 @@
         <div class="setting-row"><div>진동 피드백<small>지원되는 모바일 기기에서만 동작합니다.</small></div><button id="vibrationSwitch" class="switch" type="button" aria-label="진동 전환"></button></div>
         <div class="setting-row"><div>효과 줄이기<small>파티클과 움직임 효과를 줄여 눈의 피로와 발열을 낮춥니다.</small></div><button id="motionSwitch" class="switch" type="button" aria-label="효과 줄이기 전환"></button></div>
         <div class="setting-row"><div>큰 글씨<small>설명과 버튼 글자를 조금 더 크게 표시합니다.</small></div><button id="largeTextSwitch" class="switch" type="button" aria-label="큰 글씨 전환"></button></div>
-        <div class="setting-row"><div>렌더링 품질<small>Auto는 FPS를 보며 자동으로 저성능 모드로 전환합니다.</small></div><select id="qualitySelect" class="select-control" aria-label="렌더링 품질"><option value="auto">Auto</option><option value="high">High 60</option><option value="medium">Medium</option><option value="low">Low</option><option value="safe">Safe</option></select></div>
+        <div class="setting-row"><div>렌더링 품질<small>Auto는 기기 속도를 보며 자동으로 가볍게 조절합니다.</small></div><select id="qualitySelect" class="select-control" aria-label="렌더링 품질"><option value="auto">Auto</option><option value="high">부드럽게</option><option value="medium">균형 모드</option><option value="low">절전 모드</option><option value="safe">가볍게</option></select></div>
+        <div class="setting-row"><div>AI 의사 열화상<small>카메라 뱀 모드에서 사람·개·고양이를 따뜻한 온기로 표현합니다. 실제 체온 측정은 아닙니다.</small></div><button id="aiSwitch" class="switch" type="button" aria-label="AI 의사 열화상 전환"></button></div>
       </div>
-      <div class="privacy-box"><strong>개인정보:</strong> 로그인 없음, 위치 정보 사용 없음, 광고 추적 없음, 카메라 영상 저장·전송 없음.</div>
+      <div class="privacy-box"><strong>개인정보:</strong> 로그인 없음, 위치 정보 사용 없음, 광고 추적 없음, 카메라 영상 저장·전송 없음. AI 실험 모드는 외부 모델을 내려받지만, 카메라 프레임을 서버로 보내지 않고 브라우저 안에서만 사람·개·고양이를 추론합니다.</div>
       <div class="modal-actions">
         <button id="settingsCloseBtn" class="small-btn" type="button">닫기</button>
       </div>
@@ -803,8 +880,8 @@
     (() => {
       'use strict';
 
-      const APP_VERSION = '0.9.6-beta';
-      const SETTINGS_KEY = 'nanobanana-eye-settings-v095';
+      const APP_VERSION = '0.9.12-ai-mission-beta';
+      const SETTINGS_KEY = 'nanobanana-eye-settings-v098-aiwarm';
       const DEFAULT_SETTINGS = {
         sound: true,
         speech: true,
@@ -812,15 +889,22 @@
         reducedMotion: false,
         largeText: false,
         quality: 'auto',
-        cameraConsent: false
+        cameraConsent: false,
+        aiThermal: false
       };
       const QUALITY_PROFILES = {
-        high: { label: 'High 60', frameMs: 16.7, beeBlock: 16, particleScale: 1, motionCell: 10 },
-        medium: { label: 'Medium', frameMs: 22.2, beeBlock: 20, particleScale: 0.78, motionCell: 12 },
-        low: { label: 'Low', frameMs: 33.3, beeBlock: 28, particleScale: 0.52, motionCell: 16 },
-        safe: { label: 'Safe', frameMs: 41.7, beeBlock: 34, particleScale: 0.34, motionCell: 20 }
+        high: { label: '부드럽게', frameMs: 16.7, beeBlock: 16, particleScale: 1, motionCell: 10 },
+        medium: { label: '균형 모드', frameMs: 22.2, beeBlock: 20, particleScale: 0.78, motionCell: 12 },
+        low: { label: '절전 모드', frameMs: 33.3, beeBlock: 28, particleScale: 0.52, motionCell: 16 },
+        safe: { label: '가볍게', frameMs: 41.7, beeBlock: 34, particleScale: 0.34, motionCell: 20 }
       };
       const QUALITY_ORDER = ['high', 'medium', 'low', 'safe'];
+      const AI_W = 320;
+      const AI_H = 240;
+      const AI_TARGET_CLASSES = new Set(['person', 'dog', 'cat']);
+      const AI_CLASS_KO = { person: '사람', dog: '개', cat: '고양이' };
+      const TFJS_URL = 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js';
+      const COCO_SSD_URL = 'https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js';
 
       function loadSettings() {
         try {
@@ -850,7 +934,9 @@
           truth: '사람은 세 종류의 원뿔세포가 있어 색 차이를 비교적 세밀하게 구분해요.',
           app: '게임에서는 사람 모드를 기준 화면으로 두고, 다른 동물 모드와 비교할 수 있게 했어요.',
           survival: '다양한 색과 모양을 구분하는 능력은 익은 열매, 도구, 표정 같은 단서를 읽는 데 도움을 줘요.',
-          caution: '사람 눈이 기준이지만, 모든 생물이 사람처럼 보는 것은 아니에요.'
+          caution: '사람 눈이 기준이지만, 모든 생물이 사람처럼 보는 것은 아니에요.',
+          mission: '색과 모양을 균형 있게 보고 샌드위치를 찾아요.',
+          parentQuestion: '사람 눈이 기준처럼 느껴지지만, 강아지·벌·뱀은 왜 다르게 보는 걸까요?'
         },
         dog: {
           id: 'dog', emoji: '🐶', name: '강아지', target: 'ball',
@@ -860,7 +946,9 @@
           truth: '강아지는 사람보다 색 구분이 단순한 이색형 색각에 가까워 빨강·초록 차이가 약해요.',
           app: '적록색 차이를 줄이는 색각 매트릭스를 적용하고, 공 주변에는 냄새 단서처럼 움직이는 입자를 추가했어요.',
           survival: '개는 눈만 쓰지 않아요. 후각, 청각, 움직임 감지가 함께 작동해서 먹이와 장난감을 찾아요.',
-          caution: '개가 세상을 흑백으로만 보는 것은 아니에요. 파랑·노랑 계열은 구분할 수 있어요.'
+          caution: '개가 세상을 흑백으로만 보는 것은 아니에요. 파랑·노랑 계열은 구분할 수 있어요.',
+          mission: '빨강·초록 색보다 냄새 입자와 움직임 단서를 따라 공을 찾아요.',
+          parentQuestion: '강아지는 공을 찾을 때 눈 말고 어떤 감각을 함께 쓸까요?'
         },
         snake: {
           id: 'snake', emoji: '🐍', name: '뱀', target: 'mouse',
@@ -868,9 +956,11 @@
           kid: '따뜻한 생쥐가 더 잘 보이는 비유 화면이에요.',
           guide: '뱀 모드야! 생쥐처럼 따뜻한 동물은 밝게 보이고, 개구리나 물은 더 차갑게 보일 거야.',
           truth: '모든 뱀이 열화상을 보는 것은 아니고, 일부 뱀은 피트 기관으로 적외선 열 차이를 감지해요.',
-          app: '게임 모드는 픽셀 밝기가 아니라 생쥐·개구리·물·땅에 가상의 체온 값을 부여한 온도 지도를 사용해요.',
+          app: '게임 모드는 픽셀 밝기가 아니라 생쥐·개구리·물·땅에 가상의 체온 값을 부여한 온도 지도를 사용해요. AI 실험 모드는 카메라에서 사람·개·고양이를 따뜻하게 칠해요.',
           survival: '어두운 곳에서도 따뜻한 먹이를 찾는 데 유리하지만, 실제 감각은 고해상도 열화상 카메라처럼 선명하지 않아요.',
-          caution: '모든 뱀이 열을 감지하는 것은 아니며, 카메라 모드의 열화상은 실제 적외선 촬영이 아니에요.'
+          caution: '모든 뱀이 열을 감지하는 것은 아니며, 카메라 모드의 열화상은 실제 적외선 촬영이나 체온 측정이 아니에요.',
+          mission: '차가운 배경 속에서 따뜻한 생쥐를 찾아요.',
+          parentQuestion: '뱀에게 따뜻한 먹이를 찾는 능력은 언제 도움이 될까요?'
         },
         bee: {
           id: 'bee', emoji: '🐝', name: '벌', target: 'flower',
@@ -880,7 +970,9 @@
           truth: '벌은 겹눈으로 세상을 조각내어 보고, 사람에게 보이지 않는 자외선 무늬도 꽃 찾기에 활용해요.',
           app: '화면은 실제 자외선을 낼 수 없어서 UV 반사 지도를 보라색 교육 색으로 약속해 보여줘요.',
           survival: '꽃의 UV 넥타 가이드는 벌이 꿀과 꽃가루가 있는 중심으로 빠르게 가도록 도와요.',
-          caution: '일반 화면은 진짜 자외선을 보여주지 못해요. 보라색은 교육용 약속 색이에요.'
+          caution: '일반 화면은 진짜 자외선을 보여주지 못해요. 보라색은 교육용 약속 색이에요.',
+          mission: '꽃의 숨은 UV 길잡이를 따라 꿀이 있는 꽃을 찾아요.',
+          parentQuestion: '벌은 왜 꽃 가운데의 숨은 무늬를 잘 찾을 수 있을까요?'
         },
         worm: {
           id: 'worm', emoji: '🐛', name: '지렁이', target: 'leaf',
@@ -900,7 +992,9 @@
           truth: '스넬의 창은 물고기 눈만의 렌즈 효과가 아니라 공기와 물 경계에서 빛이 굴절되며 생기는 현상이에요.',
           app: '가운데 둥근 영역은 굴절되어 압축되고, 바깥 영역은 전반사처럼 어둡게 반사되도록 만들었어요.',
           survival: '물속 동물은 수면 위 그림자와 움직임을 읽어 먹이와 위험을 파악할 수 있어요.',
-          caution: '스넬의 창은 물고기 눈 자체가 아니라 물과 공기 경계에서 생기는 굴절 효과예요.'
+          caution: '스넬의 창은 물고기 눈 자체가 아니라 물과 공기 경계에서 생기는 굴절 효과예요.',
+          mission: '둥근 물 위 창 안에 모여 보이는 목표물을 찾아요.',
+          parentQuestion: '물속에서 위를 보면 왜 하늘이 둥근 창처럼 모여 보일까요?'
         }
       };
 
@@ -935,6 +1029,7 @@
         cameraHomeTopBtn: document.getElementById('cameraHomeTopBtn'),
         cameraMuteBtn: document.getElementById('cameraMuteBtn'),
         cameraCompareBtn: document.getElementById('cameraCompareBtn'),
+        cameraAiBtn: document.getElementById('cameraAiBtn'),
         cameraFullscreenBtn: document.getElementById('cameraFullscreenBtn'),
         settingsCameraBtn: document.getElementById('settingsCameraBtn'),
         cameraQualityBadge: document.getElementById('cameraQualityBadge'),
@@ -942,6 +1037,8 @@
         timerBadge: document.getElementById('timerBadge'),
         scoreBadge: document.getElementById('scoreBadge'),
         tipText: document.getElementById('tipText'),
+        survivalMissionText: document.getElementById('survivalMissionText'),
+        parentQuestionBox: document.getElementById('parentQuestionBox'),
         finalScore: document.getElementById('finalScore'),
         eyeBook: document.getElementById('eyeBook'),
         missionName: document.getElementById('missionName'),
@@ -965,6 +1062,7 @@
         vibrationSwitch: document.getElementById('vibrationSwitch'),
         motionSwitch: document.getElementById('motionSwitch'),
         largeTextSwitch: document.getElementById('largeTextSwitch'),
+        aiSwitch: document.getElementById('aiSwitch'),
         qualitySelect: document.getElementById('qualitySelect')
       };
 
@@ -987,6 +1085,10 @@
       uvCanvas.width = W;
       uvCanvas.height = H;
       const uvCtx = uvCanvas.getContext('2d', { willReadFrequently: true });
+      const aiCanvas = document.createElement('canvas');
+      aiCanvas.width = AI_W;
+      aiCanvas.height = AI_H;
+      const aiCtx = aiCanvas.getContext('2d', { willReadFrequently: true });
       const fishImage = ctx.createImageData(W, H);
       const cameraFishImage = cameraCtx.createImageData(W, H);
       const fishMap = buildFishMap();
@@ -1022,6 +1124,18 @@
           level: 'high',
           lowSince: 0,
           highSince: 0
+        },
+        ai: {
+          model: null,
+          loading: false,
+          loaded: false,
+          error: null,
+          loadPromise: null,
+          running: false,
+          lastRun: 0,
+          lastResultTime: 0,
+          results: [],
+          smooth: []
         }
       };
 
@@ -1052,13 +1166,25 @@
       function updatePerfBadges() {
         const key = currentQualityKey();
         const profile = currentQuality();
-        const auto = settings.quality === 'auto' ? 'Auto ' : '';
-        const qText = `⚡ ${auto}${profile.label}`;
-        const fpsText = state.perf.fps ? `FPS ${Math.round(state.perf.fps)}` : 'FPS --';
+        const qualityKo = {
+          high: '부드럽게',
+          medium: '균형 모드',
+          low: '절전 모드',
+          safe: '가볍게'
+        };
+        let qText;
+        if (aiThermalActive()) qText = '🧪 AI 온기 켜짐';
+        else if (settings.quality === 'auto') qText = '⚡ 자동 조절';
+        else qText = `⚡ ${qualityKo[key] || profile.label}`;
         if (dom.qualityBadge) dom.qualityBadge.textContent = qText;
         if (dom.cameraQualityBadge) dom.cameraQualityBadge.textContent = qText;
-        if (dom.fpsBadge) dom.fpsBadge.textContent = fpsText;
-        if (dom.cameraFpsBadge) dom.cameraFpsBadge.textContent = fpsText;
+        // FPS는 개발자에게는 useful하지만 아이/보호자에게는 의미가 적어 기본 화면에서는 숨깁니다.
+        [dom.fpsBadge, dom.cameraFpsBadge].forEach(el => {
+          if (!el) return;
+          el.textContent = '';
+          el.hidden = true;
+          el.setAttribute('aria-hidden', 'true');
+        });
       }
 
       function resetPerf() {
@@ -1108,9 +1234,15 @@
         updatePerfBadges();
       }
 
-      function shouldRenderThisFrame(now) {
+      function targetFrameMs() {
         const profile = currentQuality();
-        if (!state.perf.lastRender || now - state.perf.lastRender >= profile.frameMs) {
+        if (aiThermalActive()) return Math.max(profile.frameMs, currentQualityKey() === 'safe' ? 41.7 : 33.3);
+        return profile.frameMs;
+      }
+
+      function shouldRenderThisFrame(now) {
+        const frameMs = targetFrameMs();
+        if (!state.perf.lastRender || now - state.perf.lastRender >= frameMs) {
           state.perf.lastRender = now;
           recordFrame(now);
           return true;
@@ -1152,7 +1284,8 @@
           [dom.speechSwitch, settings.speech],
           [dom.vibrationSwitch, settings.vibration],
           [dom.motionSwitch, settings.reducedMotion],
-          [dom.largeTextSwitch, settings.largeText]
+          [dom.largeTextSwitch, settings.largeText],
+          [dom.aiSwitch, settings.aiThermal]
         ];
         pairs.forEach(([el, on]) => {
           if (!el) return;
@@ -1161,6 +1294,7 @@
         });
         if (dom.qualitySelect) dom.qualitySelect.value = settings.quality;
         syncMuteButtons();
+        updateAIButtons();
         updatePerfBadges();
       }
 
@@ -1213,6 +1347,282 @@
         state.compare = !state.compare;
         updateCompareButtons();
         setLive(state.compare ? '사람 눈과 동물 눈 비교를 켰어요.' : '비교 모드를 껐어요.');
+      }
+
+      function aiThermalActive() {
+        return !!settings.aiThermal && state.mode === 'camera' && state.animal === 'snake';
+      }
+
+      function updateAIButtons() {
+        const label = settings.aiThermal ? '🧪 온기 켜짐' : '🧪 AI 온기';
+        if (dom.cameraAiBtn) {
+          dom.cameraAiBtn.textContent = label;
+          dom.cameraAiBtn.classList.toggle('active', !!settings.aiThermal);
+          dom.cameraAiBtn.setAttribute('aria-pressed', settings.aiThermal ? 'true' : 'false');
+        }
+        if (dom.aiSwitch) {
+          dom.aiSwitch.classList.toggle('on', !!settings.aiThermal);
+          dom.aiSwitch.setAttribute('aria-pressed', settings.aiThermal ? 'true' : 'false');
+        }
+      }
+
+      async function toggleAIThermal() {
+        settings.aiThermal = !settings.aiThermal;
+        saveSettings();
+        updateAIButtons();
+        if (settings.aiThermal) {
+          if (state.mode === 'camera' && state.animal !== 'snake') setAnimal('snake', true);
+          updateCameraStatus('AI 온기 모드를 준비하고 있어요. 사람·개·고양이를 조심스럽게 찾아요.');
+          await ensureAIModel();
+        } else {
+          state.ai.results = [];
+          state.ai.smooth = [];
+          updateCameraStatus('AI 온기 모드를 껐어요. 기본 뱀 의사 열화상으로 돌아갑니다.');
+        }
+      }
+
+      function loadExternalScript(src) {
+        return new Promise((resolve, reject) => {
+          const already = document.querySelector(`script[data-ai-src="${src}"]`);
+          if (already) {
+            if (already.dataset.loaded === 'true') resolve();
+            else {
+              already.addEventListener('load', resolve, { once: true });
+              already.addEventListener('error', () => reject(new Error(`스크립트를 불러오지 못했어요: ${src}`)), { once: true });
+            }
+            return;
+          }
+          const script = document.createElement('script');
+          script.src = src;
+          script.async = true;
+          script.defer = true;
+          script.dataset.aiSrc = src;
+          script.addEventListener('load', () => { script.dataset.loaded = 'true'; resolve(); }, { once: true });
+          script.addEventListener('error', () => reject(new Error(`스크립트를 불러오지 못했어요: ${src}`)), { once: true });
+          document.head.appendChild(script);
+        });
+      }
+
+      async function ensureAIModel() {
+        if (state.ai.model) return true;
+        if (state.ai.loading && state.ai.loadPromise) return state.ai.loadPromise;
+        state.ai.loading = true;
+        state.ai.error = null;
+        updateAIButtons();
+        updateCameraStatus('AI 온기 모델을 불러오는 중이에요. 처음 한 번은 인터넷 연결이 필요할 수 있어요.');
+        state.ai.loadPromise = (async () => {
+          try {
+            await loadExternalScript(TFJS_URL);
+            await loadExternalScript(COCO_SSD_URL);
+            if (!window.tf || !window.cocoSsd) throw new Error('TensorFlow.js 또는 COCO-SSD가 준비되지 않았어요.');
+            try {
+              if (window.tf.setBackend) await window.tf.setBackend('webgl');
+            } catch (_) {
+              try { if (window.tf.setBackend) await window.tf.setBackend('cpu'); } catch (__) {}
+            }
+            if (window.tf.ready) await window.tf.ready();
+            state.ai.model = await window.cocoSsd.load({ base: 'lite_mobilenet_v2' });
+            state.ai.loaded = true;
+            state.ai.loading = false;
+            state.ai.error = null;
+            updateCameraStatus('AI 모델 준비 완료! 뱀 모드에서 사람·개·고양이의 온기를 최대 3개까지 보여줘요.');
+            setLive('AI 온기 모델이 준비됐어요.');
+            return true;
+          } catch (err) {
+            state.ai.loading = false;
+            state.ai.loaded = false;
+            state.ai.error = err && err.message ? err.message : 'AI 모델을 불러오지 못했어요.';
+            settings.aiThermal = false;
+            saveSettings();
+            updateAIButtons();
+            updateCameraStatus(`AI 모델을 불러오지 못했어요. 기본 필터로 계속합니다. ${state.ai.error}`);
+            return false;
+          }
+        })();
+        return state.ai.loadPromise;
+      }
+
+      function aiIntervalMs() {
+        const key = currentQualityKey();
+        if (key === 'high') return 150;   // 약 6~7회/초
+        if (key === 'medium') return 210; // 약 4~5회/초
+        if (key === 'low') return 300;    // 약 3회/초
+        return 420;                       // 가장 가벼운 모드
+      }
+
+      function pushWarmSource(list, label, x, y, w, h, score = 0.7, source = label) {
+        const px = clamp(x, -40, W + 40);
+        const py = clamp(y, -40, H + 40);
+        const pw = clamp(w, 8, W + 80);
+        const ph = clamp(h, 8, H + 80);
+        if (px + pw < 0 || py + ph < 0 || px > W || py > H) return;
+        list.push({
+          label,
+          source,
+          score: clamp(score, 0.35, 1),
+          x: px,
+          y: py,
+          w: pw,
+          h: ph,
+          seen: performance.now()
+        });
+      }
+
+      function predictionToWarmSources(prediction, sx, sy) {
+        const out = [];
+        const label = prediction.class;
+        const score = prediction.score || 0.6;
+        const x = prediction.bbox[0] * sx;
+        const y = prediction.bbox[1] * sy;
+        const w = prediction.bbox[2] * sx;
+        const h = prediction.bbox[3] * sy;
+        if (w < 18 || h < 18) return out;
+
+        // AI 단순 베타: 전용 손/발 추정은 끄고, 모델이 직접 아는 person/dog/cat 객체만 온기로 표시합니다.
+        if (label === 'person') {
+          const pad = Math.min(34, Math.max(10, Math.sqrt(w * h) * 0.04));
+          pushWarmSource(out, 'person', x - pad, y - pad, w + pad * 2, h + pad * 2, score, 'person');
+        } else if (label === 'dog' || label === 'cat') {
+          const pad = Math.min(30, Math.max(8, Math.sqrt(w * h) * 0.05));
+          pushWarmSource(out, label, x - pad, y - pad, w + pad * 2, h + pad * 2, score, label);
+        }
+        return out;
+      }
+
+      function rectsOverlap(a, b, pad = 0) {
+        return !(
+          a.x + a.w < b.x - pad ||
+          a.x > b.x + b.w + pad ||
+          a.y + a.h < b.y - pad ||
+          a.y > b.y + b.h + pad
+        );
+      }
+
+      function isPlausibleAIPrediction(p) {
+        if (!p || !AI_TARGET_CLASSES.has(p.class) || !p.bbox) return false;
+        const score = p.score || 0;
+        const [x, y, w, h] = p.bbox;
+        const area = (w * h) / (AI_W * AI_H);
+        if (p.class === 'person') {
+          if (score < 0.52) return false;
+          if (area > 0.78 && score < 0.78) return false;
+          if (w / Math.max(1, h) > 2.4 && score < 0.78) return false;
+          return true;
+        }
+        if (p.class === 'dog' || p.class === 'cat') {
+          if (score < 0.58) return false;
+          if (area > 0.82 && score < 0.82) return false;
+          return true;
+        }
+        return false;
+      }
+
+      function consolidateWarmSources(rawSources, maxCount = 3) {
+        const ranked = rawSources.map(src => {
+          const area = (src.w * src.h) / (W * H);
+          let rankScore = src.score || 0.5;
+          if (src.label === 'person') rankScore += 0.06;
+          if (src.label === 'dog' || src.label === 'cat') rankScore += 0.08;
+          const sweet = 1 - Math.min(1, Math.abs(area - 0.04) / 0.10);
+          rankScore += sweet * 0.10;
+          return { ...src, rankScore };
+        }).sort((a, b) => b.rankScore - a.rankScore);
+
+        const chosen = [];
+        for (const src of ranked) {
+          if (chosen.length >= maxCount) break;
+          const tooClose = chosen.some(sel => rectsOverlap(sel, src, Math.min(sel.w, sel.h, src.w, src.h) * 0.22));
+          if (tooClose) continue;
+          chosen.push(src);
+        }
+        if (chosen.length < maxCount) {
+          for (const src of ranked) {
+            if (chosen.length >= maxCount) break;
+            if (chosen.includes(src)) continue;
+            chosen.push(src);
+          }
+        }
+        return chosen.map(({ rankScore, ...rest }) => rest);
+      }
+
+      function maybeRunAIDetection(time) {
+        if (!aiThermalActive()) return;
+        if (!state.ai.model) {
+          if (!state.ai.loading) ensureAIModel();
+          return;
+        }
+        if (state.cameraDemo || state.ai.running || time - state.ai.lastRun < aiIntervalMs()) return;
+        state.ai.running = true;
+        state.ai.lastRun = time;
+        try {
+          aiCtx.drawImage(baseCanvas, 0, 0, W, H, 0, 0, AI_W, AI_H);
+          state.ai.model.detect(aiCanvas, 8, 0.28).then(predictions => {
+            const sx = W / AI_W;
+            const sy = H / AI_H;
+            const usable = predictions.filter(isPlausibleAIPrediction).slice(0, 3);
+            const personBoxes = usable
+              .filter(p => p.class === 'person')
+              .map(p => ({ x: p.bbox[0], y: p.bbox[1], w: p.bbox[2], h: p.bbox[3] }));
+            const sources = [];
+            usable.forEach(p => sources.push(...predictionToWarmSources(p, sx, sy)));
+            state.ai.results = consolidateWarmSources(sources, 3);
+            state.ai.lastResultTime = performance.now();
+          }).catch(err => {
+            state.ai.error = err && err.message ? err.message : 'AI 감지 중 오류가 났어요.';
+          }).finally(() => { state.ai.running = false; });
+        } catch (err) {
+          state.ai.error = err && err.message ? err.message : 'AI 감지를 시작하지 못했어요.';
+          state.ai.running = false;
+        }
+      }
+
+      function updateAISmoothing(time) {
+        const targets = state.ai.results || [];
+        const usedTargets = new Set();
+        const smooth = state.ai.smooth || [];
+        smooth.forEach(s => {
+          let best = -1;
+          let bestDist = Infinity;
+          targets.forEach((t, idx) => {
+            if (usedTargets.has(idx) || t.label !== s.label || t.source !== s.source) return;
+            const sx = s.x + s.w / 2;
+            const sy = s.y + s.h / 2;
+            const tx = t.x + t.w / 2;
+            const ty = t.y + t.h / 2;
+            const dist = Math.hypot(sx - tx, sy - ty);
+            if (dist < bestDist) { bestDist = dist; best = idx; }
+          });
+          if (best >= 0 && bestDist < 260) {
+            const t = targets[best];
+            usedTargets.add(best);
+            s.tx = t.x; s.ty = t.y; s.tw = t.w; s.th = t.h;
+            s.source = t.source; s.score = t.score; s.lastSeen = time; s.targetOpacity = 1;
+          } else {
+            s.targetOpacity = 0;
+          }
+        });
+        targets.forEach((t, idx) => {
+          if (usedTargets.has(idx)) return;
+          smooth.push({
+            label: t.label,
+            source: t.source,
+            x: t.x, y: t.y, w: t.w, h: t.h,
+            tx: t.x, ty: t.y, tw: t.w, th: t.h,
+            score: t.score,
+            opacity: 0,
+            targetOpacity: 1,
+            lastSeen: time
+          });
+        });
+        smooth.forEach(s => {
+          const a = settings.reducedMotion ? 0.45 : 0.22;
+          s.x += (s.tx - s.x) * a;
+          s.y += (s.ty - s.y) * a;
+          s.w += (s.tw - s.w) * a;
+          s.h += (s.th - s.h) * a;
+          s.opacity += ((s.targetOpacity || 0) - s.opacity) * 0.18;
+        });
+        state.ai.smooth = smooth.filter(s => s.opacity > 0.04 || time - s.lastSeen < 900);
       }
 
       function togglePause() {
@@ -2071,6 +2481,66 @@
         outCtx.restore();
       }
 
+      function applyAISnakeThermalFilter(outCtx = cameraCtx, time = performance.now()) {
+        const visible = baseCtx.getImageData(0, 0, W, H);
+        const d = visible.data;
+        for (let i = 0; i < d.length; i += 4) {
+          const lum = d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114;
+          const cold = 15 + lum * 0.10;
+          const pi = (clamp(cold, 0, 58) | 0) * 3;
+          d[i] = snakePalette[pi];
+          d[i + 1] = snakePalette[pi + 1];
+          d[i + 2] = snakePalette[pi + 2];
+        }
+        outCtx.putImageData(visible, 0, 0);
+        outCtx.save();
+        outCtx.globalAlpha = 0.045;
+        outCtx.drawImage(baseCanvas, 0, 0);
+        outCtx.restore();
+
+        updateAISmoothing(time);
+        const detections = state.ai.smooth || [];
+        outCtx.save();
+        outCtx.globalCompositeOperation = 'screen';
+        detections.forEach(det => {
+          if (det.opacity <= 0.035) return;
+          const cx = det.x + det.w / 2;
+          const cy = det.y + det.h / 2;
+          const confidence = clamp(det.score || 0.58, 0.35, 1);
+          const pulse = settings.reducedMotion ? 1 : 1 + Math.sin(time * 0.005 + cx * 0.014 + cy * 0.009) * 0.035;
+          const typeScale = det.label === 'person' ? 1.0 : 0.88;
+          const rx = Math.max(18, det.w * 0.55 * typeScale) * pulse;
+          const ry = Math.max(20, det.h * 0.62 * typeScale) * pulse;
+          const alpha = det.opacity * (0.58 + confidence * 0.42);
+          const grad = outCtx.createRadialGradient(cx, cy, 4, cx, cy, Math.max(rx, ry));
+          grad.addColorStop(0, `rgba(255,255,255,${0.88 * alpha})`);
+          grad.addColorStop(0.16, `rgba(255,250,136,${0.84 * alpha})`);
+          grad.addColorStop(0.42, `rgba(255,116,34,${0.72 * alpha})`);
+          grad.addColorStop(0.74, `rgba(210,36,110,${0.38 * alpha})`);
+          grad.addColorStop(1, 'rgba(0,0,0,0)');
+          outCtx.fillStyle = grad;
+          outCtx.beginPath();
+          outCtx.ellipse(cx, cy, rx, ry, 0, 0, TWO_PI);
+          outCtx.fill();
+
+          // 과학 장비 느낌의 사각 박스/확률 대신, 뱀이 느끼는 흐릿한 온기 윤곽만 살짝 보여줍니다.
+          outCtx.strokeStyle = `rgba(255,245,160,${0.16 * det.opacity})`;
+          outCtx.lineWidth = 2;
+          outCtx.beginPath();
+          outCtx.ellipse(cx, cy, rx * 0.78, ry * 0.82, 0, 0, TWO_PI);
+          outCtx.stroke();
+        });
+        outCtx.restore();
+
+        let badge = '🐍 사람·개·고양이의 온기를 찾아요';
+        if (state.ai.loading) badge = 'AI 온기 모델을 준비하고 있어요…';
+        else if (state.ai.error) badge = 'AI 온기 감지가 어려워요. 기본 필터로 볼 수 있어요';
+        else if (!state.ai.model) badge = 'AI 온기 준비 전: 배경은 차갑게 보여요';
+        else if (detections.length) badge = '🐍 따뜻한 온기 발견!';
+        else badge = '사람이나 강아지, 고양이를 카메라에 비춰 보세요';
+        drawCameraBadge(outCtx, badge);
+      }
+
       function applyBeeFilter(outCtx = ctx, useUVMap = true) {
         const img = baseCtx.getImageData(0, 0, W, H);
         const d = img.data;
@@ -2234,9 +2704,13 @@
           applyDogFilter(outCtx);
           if (camera) drawCameraBadge(outCtx, '냄새는 실제 카메라에 없어서 색각만 비교해요');
         } else if (state.animal === 'snake') {
-          if (!camera) drawTemperatureWorld(heatCtx, time);
-          applySnakeFilter(outCtx, !camera);
-          if (camera) drawCameraBadge(outCtx, '의사 열화상: 실제 적외선 열 카메라가 아니에요');
+          if (camera && settings.aiThermal) {
+            applyAISnakeThermalFilter(outCtx, time);
+          } else {
+            if (!camera) drawTemperatureWorld(heatCtx, time);
+            applySnakeFilter(outCtx, !camera);
+            if (camera) drawCameraBadge(outCtx, '의사 열화상: 실제 적외선 열 카메라가 아니에요');
+          }
         } else if (state.animal === 'bee') {
           if (!camera) drawUVWorld(uvCtx, time);
           applyBeeFilter(outCtx, !camera);
@@ -2378,6 +2852,7 @@
           return;
         }
         const ready = state.cameraDemo ? drawCameraDemoToBase(time) : drawCameraFrameToBase();
+        if (ready) maybeRunAIDetection(time);
         if (!ready) {
           drawCameraPlaceholder(cameraCtx, '카메라 시작 또는 샘플 장면을 선택해 주세요');
         } else if (state.compare && state.animal !== 'human') {
@@ -2771,9 +3246,11 @@
         });
         const animal = ANIMALS[id];
         dom.tipText.textContent = `${animal.emoji} ${animal.name}: ${animal.short}`;
+        if (dom.survivalMissionText) dom.survivalMissionText.textContent = animal.mission || animal.short;
         setLive(`${animal.name} 시야를 선택했어요. ${animal.short}`);
         if (dom.cameraAnimalBadge) dom.cameraAnimalBadge.textContent = `${animal.emoji} ${animal.name}`;
         updateCameraStatus();
+        if (aiThermalActive()) ensureAIModel();
         renderMission();
         if (state.mode === 'playing') spawnRound();
         if (announce) {
@@ -2868,14 +3345,20 @@
 
       function renderEyeBook() {
         const explored = animalOrder.filter(id => state.explored.has(id));
+        const questionAnimal = ANIMALS[explored[explored.length - 1] || state.animal] || ANIMALS.human;
+        if (dom.parentQuestionBox) {
+          dom.parentQuestionBox.innerHTML = `<strong>오늘 아이에게 물어보세요:</strong> ${questionAnimal.parentQuestion || '동물마다 세상을 다르게 보는 이유가 뭘까요?'}`;
+        }
         dom.eyeBook.innerHTML = explored.map(id => {
           const a = ANIMALS[id];
           return `<article class="eye-card">
             <h3>${a.emoji} ${a.name}의 감각 카드</h3>
+            <p class="card-row"><span class="label">미션</span>${a.mission}</p>
             <p class="card-row"><span class="label">한 줄</span>${a.kid}</p>
             <p class="card-row"><span class="label">실제</span>${a.truth}</p>
             <p class="card-row"><span class="label">앱</span>${a.app}</p>
             <p class="card-row"><span class="label">생존</span>${a.survival}</p>
+            <p class="card-row"><span class="label">질문</span>${a.parentQuestion}</p>
             <p class="card-row"><span class="label">주의</span>${a.caution}</p>
           </article>`;
         }).join('');
@@ -2886,6 +3369,8 @@
         state.mode = 'menu';
         state.paused = false;
         state.cameraDemo = false;
+        state.ai.results = [];
+        state.ai.smooth = [];
         clearInterval(timerId);
         cancelAnimationFrame(rafId);
         dom.cameraConsentModal.classList.add('hidden');
@@ -2915,6 +3400,8 @@
         state.lastFrame = 0;
         state.manualRipples = [];
         state.motionPulse = null;
+        state.ai.results = [];
+        state.ai.smooth = [];
         prevMotionGray = null;
         resetPerf();
         showScreen('camera');
@@ -3053,6 +3540,7 @@
         dom.cameraMuteBtn.addEventListener('click', quickToggleSound);
         dom.compareBtn.addEventListener('click', toggleCompare);
         dom.cameraCompareBtn.addEventListener('click', toggleCompare);
+        dom.cameraAiBtn.addEventListener('click', toggleAIThermal);
         dom.gameFullscreenBtn.addEventListener('click', toggleFullscreen);
         dom.cameraFullscreenBtn.addEventListener('click', toggleFullscreen);
         document.addEventListener('fullscreenchange', updateFullscreenButtons);
@@ -3087,6 +3575,7 @@
         dom.vibrationSwitch.addEventListener('click', () => toggleSetting('vibration'));
         dom.motionSwitch.addEventListener('click', () => toggleSetting('reducedMotion'));
         dom.largeTextSwitch.addEventListener('click', () => toggleSetting('largeText'));
+        dom.aiSwitch.addEventListener('click', toggleAIThermal);
         dom.qualitySelect.addEventListener('change', (ev) => {
           settings.quality = ev.target.value;
           if (settings.quality !== 'auto') state.perf.level = settings.quality;
