@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>🐾 나노바나나 동물 시각 탐험대 — True Science Edition</title>
+  <title>🐾 동물 시각 탐험대</title>
   <style>
     :root {
       --glass: rgba(255, 255, 255, 0.68);
@@ -440,9 +440,13 @@
       gap: 7px;
     }
 
-    .camera-bottom-controls {
+    .camera-bottom-controls, .game-bottom-controls {
       margin-top: 2px;
       padding-bottom: max(0px, env(safe-area-inset-bottom));
+    }
+
+    .game-bottom-controls {
+      order: 10;
     }
 
     .mini-btn, .status-pill, .version-pill {
@@ -673,8 +677,8 @@
     <div class="shell">
       <section id="menuScreen" class="screen">
         <div class="glass-card">
-          <h1 class="title">🐾 나노바나나<br />동물 시각 탐험대</h1>
-          <p class="subtitle">서후가 동물의 눈으로 세상을 보며 목표물을 찾는 과학 탐험 게임이에요. 배경과 아이콘이 한 캔버스에서 함께 왜곡됩니다.</p>
+          <h1 class="title">🐾 동물 시각 탐험대</h1>
+          <p class="subtitle">동물의 눈으로 세상을 보며 목표물을 찾는 과학 탐험 게임이에요. 배경과 아이콘이 한 캔버스에서 함께 왜곡됩니다.</p>
           <p class="science-note">※ 이 앱은 동물의 감각을 100% 재현하는 장비가 아니라, 핵심 원리를 어린이가 이해하기 쉽게 바꿔 보여주는 교육용 시뮬레이션입니다.</p>
           <div class="privacy-box"><strong>카메라 안전 안내:</strong> 라이브 동물 눈 모드의 카메라 영상은 저장하지 않고, 서버로 보내지 않으며, 이 기기 안에서만 필터로 바뀝니다.</div>
           <div id="menuAnimals" class="menu-animals" aria-label="동물 선택"></div>
@@ -698,20 +702,21 @@
           <div id="scoreBadge" class="badge">⭐ 0점</div>
         </div>
         <div id="animalTabs" class="animal-tabs" aria-label="동물 시야 선택"></div>
-        <div class="control-bar" aria-label="게임 조작">
-          <button id="gameHomeBtn" class="mini-btn" type="button">🏠 처음</button>
-          <button id="pauseBtn" class="mini-btn" type="button">⏸ 쉬기</button>
-          <button id="muteBtn" class="mini-btn" type="button">🔊 소리</button>
-          <button id="compareBtn" class="mini-btn" type="button">👦 비교</button>
-          <button id="settingsGameBtn" class="mini-btn" type="button">⚙ 설정</button>
-          <span id="qualityBadge" class="status-pill">⚡ Auto</span>
-          <span id="fpsBadge" class="status-pill">FPS --</span>
-        </div>
         <div class="canvas-frame">
           <canvas id="gameCanvas" width="800" height="600" role="img" aria-label="동물 시각 필터가 적용된 탐험 게임 화면"></canvas>
           <div id="pauseOverlay" class="pause-overlay hidden">⏸ 쉬는 중</div>
         </div>
         <div id="tipText" class="tip">동물을 고르면 눈의 구조가 바뀌어요.</div>
+        <div class="control-bar game-bottom-controls" aria-label="게임 조작">
+          <button id="gameHomeBtn" class="mini-btn" type="button">🏠 처음</button>
+          <button id="pauseBtn" class="mini-btn" type="button">⏸ 쉬기</button>
+          <button id="muteBtn" class="mini-btn" type="button">🔊 소리</button>
+          <button id="compareBtn" class="mini-btn" type="button">👦 비교</button>
+          <button id="gameFullscreenBtn" class="mini-btn" type="button">⛶ 전체화면</button>
+          <button id="settingsGameBtn" class="mini-btn" type="button">⚙ 설정</button>
+          <span id="qualityBadge" class="status-pill">⚡ Auto</span>
+          <span id="fpsBadge" class="status-pill">FPS --</span>
+        </div>
       </section>
 
       <section id="cameraScreen" class="screen hidden">
@@ -736,6 +741,7 @@
           <button id="cameraHomeTopBtn" class="mini-btn" type="button">🏠 처음</button>
           <button id="cameraMuteBtn" class="mini-btn" type="button">🔊 소리</button>
           <button id="cameraCompareBtn" class="mini-btn" type="button">👦 비교</button>
+          <button id="cameraFullscreenBtn" class="mini-btn" type="button">⛶ 전체화면</button>
           <button id="settingsCameraBtn" class="mini-btn" type="button">⚙ 설정</button>
           <span id="cameraQualityBadge" class="status-pill">⚡ Auto</span>
           <span id="cameraFpsBadge" class="status-pill">FPS --</span>
@@ -797,7 +803,7 @@
     (() => {
       'use strict';
 
-      const APP_VERSION = '0.9.5-beta';
+      const APP_VERSION = '0.9.6-beta';
       const SETTINGS_KEY = 'nanobanana-eye-settings-v095';
       const DEFAULT_SETTINGS = {
         sound: true,
@@ -915,6 +921,7 @@
         pauseBtn: document.getElementById('pauseBtn'),
         muteBtn: document.getElementById('muteBtn'),
         compareBtn: document.getElementById('compareBtn'),
+        gameFullscreenBtn: document.getElementById('gameFullscreenBtn'),
         settingsGameBtn: document.getElementById('settingsGameBtn'),
         qualityBadge: document.getElementById('qualityBadge'),
         fpsBadge: document.getElementById('fpsBadge'),
@@ -928,6 +935,7 @@
         cameraHomeTopBtn: document.getElementById('cameraHomeTopBtn'),
         cameraMuteBtn: document.getElementById('cameraMuteBtn'),
         cameraCompareBtn: document.getElementById('cameraCompareBtn'),
+        cameraFullscreenBtn: document.getElementById('cameraFullscreenBtn'),
         settingsCameraBtn: document.getElementById('settingsCameraBtn'),
         cameraQualityBadge: document.getElementById('cameraQualityBadge'),
         cameraFpsBadge: document.getElementById('cameraFpsBadge'),
@@ -1214,6 +1222,53 @@
         dom.pauseBtn.textContent = state.paused ? '▶ 계속' : '⏸ 쉬기';
         setLive(state.paused ? '게임을 잠시 멈췄어요.' : '게임을 다시 시작했어요.');
         if (state.paused && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+
+      function fullscreenElement() {
+        return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement || null;
+      }
+
+      function updateFullscreenButtons() {
+        const active = !!fullscreenElement();
+        const label = active ? '↙ 화면복귀' : '⛶ 전체화면';
+        [dom.gameFullscreenBtn, dom.cameraFullscreenBtn].forEach(btn => {
+          if (!btn) return;
+          btn.textContent = label;
+          btn.classList.toggle('active', active);
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+      }
+
+      function setVisibleStatus(message) {
+        if (state.mode === 'playing' && dom.tipText) dom.tipText.textContent = message;
+        else if (state.mode === 'camera') updateCameraStatus(message);
+      }
+
+      async function toggleFullscreen() {
+        try {
+          if (!fullscreenElement()) {
+            const root = document.documentElement;
+            const request = root.requestFullscreen || root.webkitRequestFullscreen || root.msRequestFullscreen;
+            if (!request) {
+              const msg = '이 브라우저에서는 전체화면을 지원하지 않아요.';
+              setVisibleStatus(msg);
+              setLive(msg);
+              return;
+            }
+            await request.call(root);
+            setLive('전체화면을 켰어요.');
+          } else {
+            const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+            if (exit) await exit.call(document);
+            setLive('전체화면을 껐어요.');
+          }
+        } catch (err) {
+          const msg = '브라우저가 전체화면 전환을 허용하지 않았어요. HTTPS로 배포한 뒤 다시 시도해 보세요.';
+          setVisibleStatus(msg);
+          setLive(msg);
+        } finally {
+          updateFullscreenButtons();
+        }
       }
 
 
@@ -2784,7 +2839,7 @@
         dom.pauseBtn.textContent = '⏸ 쉬기';
         updateHud();
         setAnimal(state.animal, false);
-        speak(`서후야, 탐험을 시작하자! ${ANIMALS[state.animal].guide}`);
+        speak(`탐험을 시작하자! ${ANIMALS[state.animal].guide}`);
         clearInterval(timerId);
         timerId = window.setInterval(() => {
           if (state.mode !== 'playing' || state.paused) return;
@@ -2808,7 +2863,7 @@
         dom.finalScore.textContent = `${state.score}점`;
         renderEyeBook();
         showScreen('result');
-        speak(`탐험 완료! 서후의 점수는 ${state.score}점이야. 비밀 눈 백과사전을 살펴보자.`);
+        speak(`탐험 완료! 점수는 ${state.score}점이야. 비밀 눈 백과사전을 살펴보자.`);
       }
 
       function renderEyeBook() {
@@ -2981,6 +3036,7 @@
         if (dom.versionPill) dom.versionPill.textContent = `Beta ${APP_VERSION}`;
         applySettingsToUI();
         updateCompareButtons();
+        updateFullscreenButtons();
         resetPerf();
         setAnimal('human', false);
         renderMission();
@@ -2997,6 +3053,10 @@
         dom.cameraMuteBtn.addEventListener('click', quickToggleSound);
         dom.compareBtn.addEventListener('click', toggleCompare);
         dom.cameraCompareBtn.addEventListener('click', toggleCompare);
+        dom.gameFullscreenBtn.addEventListener('click', toggleFullscreen);
+        dom.cameraFullscreenBtn.addEventListener('click', toggleFullscreen);
+        document.addEventListener('fullscreenchange', updateFullscreenButtons);
+        document.addEventListener('webkitfullscreenchange', updateFullscreenButtons);
         dom.cameraStartBtn.addEventListener('click', requestCameraWithConsent);
         dom.cameraDemoBtn.addEventListener('click', () => startCameraDemo());
         dom.cameraStopBtn.addEventListener('click', () => {
