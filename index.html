@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>🐾 나노바나나 동물 시각 탐험대 — AI Simple Beta</title>
+  <title>🐾 나노바나나 동물 시각 탐험대 — Polish Beta</title>
   <style>
     :root {
       --glass: rgba(255, 255, 255, 0.68);
@@ -85,7 +85,8 @@
       gap: 12px;
     }
 
-    .hidden { display: none !important; }
+    .hidden, [hidden] { display: none !important; }
+
 
     .glass-card {
       width: min(92vw, 760px);
@@ -205,9 +206,11 @@
       overflow: hidden;
     }
 
-    .science-note.auto-hide-note.note-dismissed {
+    .science-note.auto-hide-note.note-dismissed,
+    .tip.auto-hide-note.note-dismissed {
       opacity: 0;
       max-height: 0;
+      min-height: 0;
       padding-top: 0;
       padding-bottom: 0;
       margin-top: -10px;
@@ -443,6 +446,9 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       font-size: clamp(0.82rem, 2.6vw, 1rem);
+      transition: opacity 360ms ease, max-height 360ms ease, min-height 360ms ease, padding 360ms ease, margin 360ms ease, border-width 360ms ease;
+      max-height: 96px;
+      overflow: hidden;
     }
 
     .result-card {
@@ -756,8 +762,21 @@
       scroll-behavior: auto !important;
     }
 
+
+    body.fullscreen-active .app {
+      align-items: center;
+      justify-content: center;
+    }
+
+    body.fullscreen-active .shell {
+      justify-content: center;
+      height: 100dvh;
+      max-height: 100dvh;
+    }
+
+
     @media (max-width: 680px) {
-      .shell { gap: 7px; justify-content: flex-start; padding-top: env(safe-area-inset-top); }
+      .shell { gap: 7px; justify-content: center; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
       .hud { grid-template-columns: 78px 1fr 78px; gap: 6px; }
       .badge, .mission-board { min-height: 48px; border-radius: 18px; }
       #missionCanvas { width: 42px; height: 42px; border-radius: 14px; }
@@ -786,7 +805,7 @@
       <section id="menuScreen" class="screen">
         <div class="glass-card">
           <h1 class="title"><button id="settingsBtn" class="title-paw" type="button" aria-label="보호자 설정 열기">🐾</button><span class="title-lines">나노바나나<br />동물 시각 탐험대</span></h1>
-          <p class="subtitle">서후가 동물의 눈으로 세상을 보며 생존 미션을 해결하는 과학 탐험 게임이에요. 이 베타에는 사람·개·고양이를 따뜻한 온기로 표현하는 AI 의사 열화상 실험 모드가 포함되어 있어요.</p>
+          <p class="subtitle">동물의 눈으로 세상을 보며 생존 미션을 해결하는 과학 탐험 게임이에요. 이 베타에는 사람·개·고양이를 따뜻한 온기로 표현하는 AI 의사 열화상 실험 모드가 포함되어 있어요.</p>
           <p class="science-note">※ 이 앱은 동물의 감각을 100% 재현하는 장비가 아니라, 핵심 원리를 어린이가 이해하기 쉽게 바꿔 보여주는 교육용 시뮬레이션입니다.</p>
           <div class="privacy-box"><strong>카메라 안전 안내:</strong> 라이브 동물 눈 모드의 카메라 영상은 저장하지 않고, 서버로 보내지 않으며, 이 기기 안에서만 필터로 바뀝니다. AI 실험 모드는 TensorFlow.js 모델을 불러와 사람·개·고양이만 이 기기 안에서 추정합니다.</div>
           <div id="menuAnimals" class="menu-animals hidden" aria-label="동물 선택" aria-hidden="true"></div>
@@ -837,9 +856,9 @@
           <canvas id="cameraCanvas" width="800" height="600" role="img" aria-label="카메라 화면에 동물 시각 필터가 적용된 라이브 화면"></canvas>
           <video id="cameraVideo" class="camera-video" playsinline autoplay muted></video>
         </div>
-        <div id="cameraStatus" class="tip">카메라 권한을 허용하면 실제 주변 장면에 동물 시야 필터를 씌워 볼 수 있어요.</div>
+        <div id="cameraStatus" class="tip auto-hide-note">카메라 권한을 허용하면 실제 주변 장면에 동물 시야 필터를 씌워 볼 수 있어요.</div>
         <div id="cameraScienceNote" class="science-note auto-hide-note">※ 카메라 모드는 교육용 시뮬레이션입니다. 휴대폰 카메라는 실제 자외선이나 적외선 열을 직접 보여주지 못합니다. AI 의사 열화상은 사람·개·고양이를 최대 3개까지 따뜻한 색으로 보여주는 실험 기능입니다.</div>
-        <div class="result-actions">
+        <div id="cameraPrimaryActions" class="result-actions">
           <button id="cameraStartBtn" class="small-btn" type="button">카메라 시작</button>
           <button id="cameraDemoBtn" class="small-btn" type="button">샘플 장면 보기</button>
           <button id="cameraStopBtn" class="small-btn" type="button">카메라 끄기</button>
@@ -861,7 +880,7 @@
         <div class="glass-card result-card">
           <h1 class="title">🔍 탐험 완료!</h1>
           <div id="finalScore" class="score-pill">0점</div>
-          <h2 style="margin:0;color:#2e7d32;">서후의 비밀 눈 백과사전</h2>
+          <h2 style="margin:0;color:#2e7d32;">비밀 눈 백과사전</h2>
           <div id="parentQuestionBox" class="parent-question-box"><strong>오늘 아이에게 물어보세요:</strong> 동물마다 세상을 다르게 보는 이유가 뭘까요?</div>
           <div id="eyeBook" class="eye-book"></div>
           <div class="result-actions">
@@ -915,7 +934,7 @@
     (() => {
       'use strict';
 
-      const APP_VERSION = '0.9.13-ai-mission-tabs-beta';
+      const APP_VERSION = '0.9.14-polish-beta';
       const SETTINGS_KEY = 'nanobanana-eye-settings-v098-aiwarm';
       const DEFAULT_SETTINGS = {
         sound: true,
@@ -1017,7 +1036,9 @@
           truth: '지렁이는 사람처럼 이미지를 보는 눈이 없지만, 빛 변화와 땅의 진동, 습한 환경 단서를 감지해요.',
           app: '전체 화면을 어둡게 하고 촉촉한 낙엽 위치에서 레이더 파동을 퍼뜨려 비시각 감각을 비유했어요.',
           survival: '밝고 건조한 곳은 위험할 수 있어요. 지렁이는 어둡고 촉촉한 흙 속 유기물을 먹으며 살아가요.',
-          caution: '지렁이가 귀로 소리를 듣는다는 뜻은 아니에요. 이 앱의 파동은 진동·습기·빛 단서를 비유한 표현이에요.'
+          caution: '지렁이가 귀로 소리를 듣는다는 뜻은 아니에요. 이 앱의 파동은 진동·습기·빛 단서를 비유한 표현이에요.',
+          mission: '밝은 곳을 피해 촉촉한 낙엽과 흙 속 단서를 따라가요.',
+          parentQuestion: '지렁이는 눈으로 그림을 보지 않아도 어떻게 안전한 흙 속을 찾을까요?'
         },
         fish: {
           id: 'fish', emoji: '🐠', name: '물고기', target: 'frog',
@@ -1083,6 +1104,7 @@
         cameraVideo: document.getElementById('cameraVideo'),
         cameraStatus: document.getElementById('cameraStatus'),
         cameraScienceNote: document.getElementById('cameraScienceNote'),
+        cameraPrimaryActions: document.getElementById('cameraPrimaryActions'),
         cameraAnimalBadge: document.getElementById('cameraAnimalBadge'),
         liveStatus: document.getElementById('liveStatus'),
         versionPill: document.getElementById('versionPill'),
@@ -1133,7 +1155,7 @@
       let timerId = 0;
       let rafId = 0;
       let cameraStream = null;
-      let cameraScienceNoteTimer = null;
+      let cameraInfoTimer = null;
       let prevMotionGray = null;
 
       const state = {
@@ -1675,6 +1697,7 @@
 
       function updateFullscreenButtons() {
         const active = !!fullscreenElement();
+        document.body.classList.toggle('fullscreen-active', active);
         const label = active ? '↙ 화면복귀' : '⛶ 전체화면';
         [dom.gameFullscreenBtn, dom.cameraFullscreenBtn].forEach(btn => {
           if (!btn) return;
@@ -3308,20 +3331,32 @@
         });
       }
 
-      function scheduleCameraScienceNoteHide() {
-        if (!dom.cameraScienceNote) return;
-        dom.cameraScienceNote.classList.remove('note-dismissed');
-        clearTimeout(cameraScienceNoteTimer);
-        cameraScienceNoteTimer = window.setTimeout(() => {
-          if (state.mode === 'camera' && dom.cameraScienceNote) {
-            dom.cameraScienceNote.classList.add('note-dismissed');
-          }
-        }, 30000);
+      function scheduleCameraInfoHide(delay = 10000) {
+        [dom.cameraStatus, dom.cameraScienceNote].forEach(el => {
+          if (el) el.classList.remove('note-dismissed');
+        });
+        clearTimeout(cameraInfoTimer);
+        cameraInfoTimer = window.setTimeout(() => {
+          if (state.mode !== 'camera') return;
+          [dom.cameraStatus, dom.cameraScienceNote].forEach(el => {
+            if (el) el.classList.add('note-dismissed');
+          });
+        }, delay);
       }
 
-      function clearCameraScienceNoteTimer() {
-        clearTimeout(cameraScienceNoteTimer);
-        cameraScienceNoteTimer = null;
+      function clearCameraInfoTimer() {
+        clearTimeout(cameraInfoTimer);
+        cameraInfoTimer = null;
+        [dom.cameraStatus, dom.cameraScienceNote].forEach(el => {
+          if (el) el.classList.remove('note-dismissed');
+        });
+      }
+
+      function updateCameraPrimaryActions() {
+        if (!dom.cameraPrimaryActions) return;
+        const liveCamera = !!cameraStream && !state.cameraDemo;
+        dom.cameraPrimaryActions.classList.toggle('hidden', liveCamera);
+        dom.cameraPrimaryActions.setAttribute('aria-hidden', liveCamera ? 'true' : 'false');
       }
 
       function showScreen(which) {
@@ -3329,8 +3364,9 @@
         dom.gameScreen.classList.toggle('hidden', which !== 'game');
         dom.cameraScreen.classList.toggle('hidden', which !== 'camera');
         dom.resultScreen.classList.toggle('hidden', which !== 'result');
-        if (which === 'camera') scheduleCameraScienceNoteHide();
-        else clearCameraScienceNoteTimer();
+        if (which === 'camera') scheduleCameraInfoHide();
+        else clearCameraInfoTimer();
+        updateCameraPrimaryActions();
       }
 
       function startGame() {
@@ -3351,7 +3387,7 @@
         dom.pauseBtn.textContent = '⏸ 쉬기';
         updateHud();
         setAnimal(state.animal, false);
-        speak(`서후야, 탐험을 시작하자! ${ANIMALS[state.animal].guide}`);
+        speak(`탐험을 시작하자! ${ANIMALS[state.animal].guide}`);
         clearInterval(timerId);
         timerId = window.setInterval(() => {
           if (state.mode !== 'playing' || state.paused) return;
@@ -3375,7 +3411,7 @@
         dom.finalScore.textContent = `${state.score}점`;
         renderEyeBook();
         showScreen('result');
-        speak(`탐험 완료! 서후의 점수는 ${state.score}점이야. 비밀 눈 백과사전을 살펴보자.`);
+        speak(`탐험 완료! 점수는 ${state.score}점이야. 비밀 눈 백과사전을 살펴보자.`);
       }
 
       function renderEyeBook() {
@@ -3388,13 +3424,13 @@
           const a = ANIMALS[id];
           return `<article class="eye-card">
             <h3>${a.emoji} ${a.name}의 감각 카드</h3>
-            <p class="card-row"><span class="label">미션</span>${a.mission}</p>
-            <p class="card-row"><span class="label">한 줄</span>${a.kid}</p>
-            <p class="card-row"><span class="label">실제</span>${a.truth}</p>
-            <p class="card-row"><span class="label">앱</span>${a.app}</p>
-            <p class="card-row"><span class="label">생존</span>${a.survival}</p>
-            <p class="card-row"><span class="label">질문</span>${a.parentQuestion}</p>
-            <p class="card-row"><span class="label">주의</span>${a.caution}</p>
+            <p class="card-row"><span class="label">미션</span>${a.mission || a.short}</p>
+            <p class="card-row"><span class="label">한 줄</span>${a.kid || a.short}</p>
+            <p class="card-row"><span class="label">실제</span>${a.truth || '동물마다 감각을 쓰는 방식이 달라요.'}</p>
+            <p class="card-row"><span class="label">앱</span>${a.app || '앱에서는 핵심 감각을 아이가 이해하기 쉽게 비유했어요.'}</p>
+            <p class="card-row"><span class="label">생존</span>${a.survival || '각 감각은 먹이, 위험, 서식지 단서를 찾는 데 도움을 줘요.'}</p>
+            <p class="card-row"><span class="label">질문</span>${a.parentQuestion || '이 동물은 어떤 단서로 살아남을까요?'}</p>
+            <p class="card-row"><span class="label">주의</span>${a.caution || '이 앱은 실제 감각을 단순화한 교육용 시뮬레이션이에요.'}</p>
           </article>`;
         }).join('');
       }
@@ -3417,12 +3453,16 @@
       function updateCameraStatus(message) {
         if (!dom.cameraStatus) return;
         if (message) {
+          dom.cameraStatus.classList.remove('note-dismissed');
           dom.cameraStatus.textContent = message;
+          if (state.mode === 'camera' && (cameraStream || state.cameraDemo)) scheduleCameraInfoHide();
           return;
         }
         const a = ANIMALS[state.animal];
         if (state.mode === 'camera') {
+          dom.cameraStatus.classList.remove('note-dismissed');
           dom.cameraStatus.textContent = `${a.emoji} ${a.name} 필터: ${a.short}`;
+          if (cameraStream || state.cameraDemo) scheduleCameraInfoHide();
         }
       }
 
@@ -3482,7 +3522,9 @@
         stopCamera(false);
         state.cameraDemo = true;
         prevMotionGray = null;
+        updateCameraPrimaryActions();
         updateCameraStatus(message);
+        scheduleCameraInfoHide(10000);
         cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(renderCameraFrame);
       }
@@ -3519,7 +3561,9 @@
           cameraStream = stream;
           dom.cameraVideo.srcObject = stream;
           await dom.cameraVideo.play();
+          updateCameraPrimaryActions();
           updateCameraStatus();
+          scheduleCameraInfoHide(10000);
           cancelAnimationFrame(rafId);
           rafId = requestAnimationFrame(renderCameraFrame);
           speak('라이브 동물 눈 모드야. 주변을 비추고 동물 버튼을 눌러 보자.');
@@ -3537,6 +3581,7 @@
           cameraStream = null;
         }
         if (dom.cameraVideo) dom.cameraVideo.srcObject = null;
+        updateCameraPrimaryActions();
         if (cancelFrame) cancelAnimationFrame(rafId);
       }
 
