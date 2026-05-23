@@ -1,0 +1,3050 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>🐾 나노바나나 동물 시각 탐험대 — True Science Edition</title>
+  <style>
+    :root {
+      --glass: rgba(255, 255, 255, 0.68);
+      --glass-strong: rgba(255, 255, 255, 0.88);
+      --ink: #36404a;
+      --green: #4caf50;
+      --green-dark: #2e7d32;
+      --orange: #ff9800;
+      --orange-dark: #ef6c00;
+      --blue: #42a5f5;
+      --pink: #ec407a;
+      --shadow: 0 18px 45px rgba(80, 70, 40, 0.22);
+      --soft-shadow: 0 10px 24px rgba(80, 70, 40, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: var(--ink);
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.9) 0 6px, transparent 7px),
+        radial-gradient(circle at 82% 20%, rgba(255, 255, 255, 0.8) 0 8px, transparent 9px),
+        radial-gradient(circle at 70% 82%, rgba(255, 235, 59, 0.45) 0 14px, transparent 15px),
+        linear-gradient(145deg, #fff8c9 0%, #e1f5fe 52%, #e8f5e9 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(rgba(255, 193, 7, 0.36) 2px, transparent 2px),
+        radial-gradient(rgba(76, 175, 80, 0.24) 2px, transparent 2px);
+      background-position: 0 0, 17px 18px;
+      background-size: 34px 34px;
+      opacity: 0.75;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100vw;
+      padding: clamp(8px, 2.2vw, 18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shell {
+      width: min(96vw, 920px);
+      height: min(100dvh, 860px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .screen {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .hidden { display: none !important; }
+
+    .glass-card {
+      width: min(92vw, 760px);
+      padding: clamp(18px, 4vw, 34px);
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 34px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.92), rgba(255,255,255,0.52));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      text-align: center;
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(2rem, 8vw, 4.3rem);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+      color: #ff8f00;
+      text-shadow: 0 5px 0 rgba(255, 193, 7, 0.28), 0 12px 28px rgba(255, 152, 0, 0.18);
+    }
+
+    .subtitle {
+      margin: 10px auto 0;
+      max-width: 620px;
+      font-size: clamp(1rem, 3.2vw, 1.35rem);
+      line-height: 1.45;
+      color: #546e7a;
+    }
+
+    .primary-btn, .animal-chip, .small-btn {
+      border: 0;
+      color: white;
+      font-weight: 900;
+      font-family: inherit;
+      cursor: pointer;
+      transform: translateY(0);
+      transition: transform 130ms ease, filter 130ms ease, box-shadow 130ms ease;
+    }
+
+    .primary-btn {
+      margin-top: 16px;
+      padding: 15px 34px;
+      border-radius: 999px;
+      font-size: clamp(1.25rem, 4.4vw, 2rem);
+      background: linear-gradient(180deg, #ffca28, #ff9800);
+      box-shadow: 0 8px 0 #ef6c00, 0 18px 34px rgba(255, 152, 0, 0.28);
+      text-shadow: 0 2px 0 rgba(0,0,0,0.12);
+    }
+
+    .mode-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .secondary-btn {
+      background: linear-gradient(180deg, #80deea, #26a69a);
+      box-shadow: 0 8px 0 #00897b, 0 18px 34px rgba(0, 137, 123, 0.22);
+    }
+
+    .camera-topline {
+      width: min(100%, 840px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .science-note {
+      width: min(100%, 840px);
+      padding: 7px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(255,255,255,0.7);
+      color: #607d8b;
+      text-align: center;
+      font-size: clamp(0.78rem, 2.3vw, 0.95rem);
+      line-height: 1.35;
+      box-shadow: 0 8px 18px rgba(80,70,40,0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: opacity 360ms ease, max-height 360ms ease, padding 360ms ease, margin 360ms ease, border-width 360ms ease;
+      max-height: 160px;
+      overflow: hidden;
+    }
+
+    .science-note.auto-hide-note.note-dismissed {
+      opacity: 0;
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: -10px;
+      margin-bottom: 0;
+      border-width: 0;
+      pointer-events: none;
+    }
+
+    .camera-video {
+      display: none;
+    }
+
+    .eye-card .card-row {
+      margin: 7px 0 0;
+    }
+
+    .eye-card .label {
+      display: inline-block;
+      margin-right: 4px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(102, 187, 106, 0.18);
+      color: #2e7d32;
+      font-size: 0.82rem;
+      font-weight: 900;
+    }
+
+    .primary-btn:active, .animal-chip:active, .small-btn:active {
+      transform: translateY(4px);
+      filter: saturate(1.1);
+    }
+
+    .menu-animals, .animal-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .menu-animals { margin-top: 18px; }
+
+    .animal-chip {
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size: clamp(0.9rem, 2.8vw, 1.05rem);
+      color: #546e7a;
+      background: var(--glass-strong);
+      box-shadow: 0 5px 0 rgba(144, 164, 174, 0.35), var(--soft-shadow);
+      border: 2px solid rgba(255,255,255,0.85);
+    }
+
+    .animal-chip.active {
+      color: white;
+      background: linear-gradient(180deg, #66bb6a, #43a047);
+      box-shadow: 0 5px 0 #2e7d32, 0 12px 20px rgba(67, 160, 71, 0.25);
+    }
+
+    .hud {
+      width: min(100%, 840px);
+      display: grid;
+      grid-template-columns: minmax(86px, 130px) 1fr minmax(86px, 130px);
+      gap: 9px;
+      align-items: center;
+    }
+
+    .badge, .mission-board {
+      min-height: 58px;
+      border-radius: 24px;
+      border: 2px solid rgba(255,255,255,0.78);
+      background: var(--glass);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+
+    .badge {
+      padding: 8px 10px;
+      font-size: clamp(1rem, 3vw, 1.35rem);
+      color: #f57c00;
+      white-space: nowrap;
+    }
+
+    .badge.alert {
+      color: #e53935;
+      animation: pulse 600ms infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+
+    .mission-board {
+      position: relative;
+      overflow: hidden;
+      gap: 8px;
+      padding: 5px 12px;
+      background: linear-gradient(160deg, rgba(232, 245, 233, 0.92), rgba(255,255,255,0.68));
+      color: #2e7d32;
+      border-color: rgba(102, 187, 106, 0.65);
+    }
+
+    .mission-board::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      right: -80px;
+      top: -90px;
+      background: radial-gradient(circle, rgba(129, 199, 132, 0.34), transparent 68%);
+    }
+
+    .mission-label, .mission-name {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(0.95rem, 3vw, 1.35rem);
+      white-space: nowrap;
+    }
+
+    #missionCanvas {
+      position: relative;
+      z-index: 1;
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      box-shadow: inset 0 0 0 2px rgba(76, 175, 80, 0.15), 0 8px 14px rgba(46, 125, 50, 0.13);
+    }
+
+    .canvas-frame {
+      position: relative;
+      width: min(100%, 840px);
+      aspect-ratio: 4 / 3;
+      border-radius: clamp(22px, 4vw, 34px);
+      overflow: hidden;
+      border: clamp(7px, 1.8vw, 12px) solid rgba(255,255,255,0.92);
+      background: #061322;
+      box-shadow: 0 18px 48px rgba(38, 50, 56, 0.25), inset 0 0 0 2px rgba(0,0,0,0.08);
+    }
+
+    #gameCanvas, #cameraCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #061322;
+    }
+
+    .tip {
+      width: min(100%, 840px);
+      min-height: 34px;
+      padding: 8px 14px;
+      border-radius: 18px;
+      text-align: center;
+      color: #455a64;
+      font-weight: 800;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(255,255,255,0.62);
+      box-shadow: 0 8px 18px rgba(80,70,40,0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: clamp(0.82rem, 2.6vw, 1rem);
+    }
+
+    .result-card {
+      max-height: min(92dvh, 820px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .score-pill {
+      margin: 0 auto;
+      width: fit-content;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fff8e1, #ffe082);
+      color: #ef6c00;
+      font-size: clamp(1.3rem, 5vw, 2.1rem);
+      font-weight: 900;
+      box-shadow: 0 8px 0 rgba(255, 152, 0, 0.22);
+    }
+
+    .eye-book {
+      overflow-y: auto;
+      padding-right: 4px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .eye-card {
+      text-align: left;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 8px 18px rgba(38, 50, 56, 0.08);
+    }
+
+    .eye-card h3 {
+      margin: 0 0 6px;
+      color: #2e7d32;
+      font-size: 1.08rem;
+    }
+
+    .eye-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: #455a64;
+      word-break: keep-all;
+    }
+
+    .result-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .small-btn {
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 1.05rem;
+      background: linear-gradient(180deg, #64b5f6, #1e88e5);
+      box-shadow: 0 6px 0 #1565c0, 0 12px 24px rgba(30, 136, 229, 0.22);
+    }
+
+
+
+    button { min-height: 44px; }
+
+    #gameCanvas, #cameraCanvas { touch-action: none; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .control-bar {
+      width: min(100%, 840px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .camera-bottom-controls {
+      margin-top: 2px;
+      padding-bottom: max(0px, env(safe-area-inset-bottom));
+    }
+
+    .mini-btn, .status-pill, .version-pill {
+      min-height: 38px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      background: rgba(255,255,255,0.72);
+      color: #455a64;
+      font: inherit;
+      font-weight: 900;
+      box-shadow: 0 6px 16px rgba(80, 70, 40, 0.11);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .mini-btn {
+      cursor: pointer;
+      transition: transform 130ms ease, filter 130ms ease;
+    }
+
+    .mini-btn.active {
+      color: #fff;
+      background: linear-gradient(180deg, #66bb6a, #43a047);
+      border-color: rgba(255,255,255,0.92);
+    }
+
+    .mini-btn:active { transform: translateY(2px); }
+
+    .status-pill {
+      color: #2e7d32;
+      font-size: 0.9rem;
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .version-pill {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 10px;
+      color: #607d8b;
+      font-size: 0.86rem;
+    }
+
+    .privacy-box {
+      margin: 12px auto 0;
+      max-width: 650px;
+      padding: 10px 14px;
+      border-radius: 18px;
+      background: rgba(232, 245, 233, 0.68);
+      border: 1px solid rgba(102, 187, 106, 0.35);
+      color: #2e7d32;
+      text-align: left;
+      font-size: clamp(0.86rem, 2.4vw, 1rem);
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
+    .privacy-box strong { color: #1b5e20; }
+
+    .modal-backdrop {
+      position: fixed;
+      z-index: 50;
+      inset: 0;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(38, 50, 56, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .modal-card {
+      width: min(94vw, 680px);
+      max-height: min(90dvh, 780px);
+      overflow-y: auto;
+      padding: clamp(18px, 4vw, 30px);
+      border-radius: 28px;
+      border: 2px solid rgba(255,255,255,0.82);
+      background: linear-gradient(160deg, rgba(255,255,255,0.96), rgba(255,255,255,0.74));
+      box-shadow: 0 30px 70px rgba(0,0,0,0.24);
+      color: #455a64;
+      text-align: left;
+    }
+
+    .modal-card h2 {
+      margin: 0 0 10px;
+      color: #ef6c00;
+      font-size: clamp(1.35rem, 4.8vw, 2rem);
+      line-height: 1.1;
+    }
+
+    .modal-card p {
+      margin: 8px 0;
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+
+    .modal-actions {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.68);
+      border: 1px solid rgba(144, 164, 174, 0.22);
+      font-weight: 900;
+    }
+
+    .setting-row small {
+      display: block;
+      margin-top: 2px;
+      color: #78909c;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .switch {
+      position: relative;
+      width: 58px;
+      min-width: 58px;
+      height: 34px;
+      border-radius: 999px;
+      background: #b0bec5;
+      border: 0;
+      cursor: pointer;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,0.08);
+    }
+
+    .switch::after {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      left: 4px;
+      top: 4px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      transition: transform 160ms ease;
+    }
+
+    .switch.on {
+      background: #66bb6a;
+    }
+
+    .switch.on::after {
+      transform: translateX(24px);
+    }
+
+    .select-control {
+      min-height: 42px;
+      padding: 7px 10px;
+      border-radius: 14px;
+      border: 2px solid rgba(144, 164, 174, 0.35);
+      background: #fff;
+      color: #455a64;
+      font: inherit;
+      font-weight: 900;
+    }
+
+    .pause-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(6, 19, 34, 0.46);
+      color: white;
+      font-size: clamp(1.8rem, 6vw, 3.2rem);
+      font-weight: 900;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    }
+
+    body.large-text .tip,
+    body.large-text .science-note,
+    body.large-text .privacy-box,
+    body.large-text .eye-card p,
+    body.large-text .animal-chip,
+    body.large-text .mini-btn,
+    body.large-text .status-pill {
+      font-size: 1.1rem;
+    }
+
+    body.reduced-motion *,
+    body.reduced-motion *::before,
+    body.reduced-motion *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    @media (max-width: 680px) {
+      .shell { gap: 7px; justify-content: flex-start; padding-top: env(safe-area-inset-top); }
+      .hud { grid-template-columns: 78px 1fr 78px; gap: 6px; }
+      .badge, .mission-board { min-height: 48px; border-radius: 18px; }
+      #missionCanvas { width: 42px; height: 42px; border-radius: 14px; }
+      .mission-name { display: none; }
+      .animal-tabs { gap: 5px; }
+      .animal-chip { padding: 7px 9px; }
+      .tip { min-height: 30px; padding: 7px 10px; }
+      .glass-card { border-radius: 26px; }
+      .mode-actions .primary-btn { width: min(100%, 310px); }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="shell">
+      <section id="menuScreen" class="screen">
+        <div class="glass-card">
+          <h1 class="title">🐾 나노바나나<br />동물 시각 탐험대</h1>
+          <p class="subtitle">서후가 동물의 눈으로 세상을 보며 목표물을 찾는 과학 탐험 게임이에요. 배경과 아이콘이 한 캔버스에서 함께 왜곡됩니다.</p>
+          <p class="science-note">※ 이 앱은 동물의 감각을 100% 재현하는 장비가 아니라, 핵심 원리를 어린이가 이해하기 쉽게 바꿔 보여주는 교육용 시뮬레이션입니다.</p>
+          <div class="privacy-box"><strong>카메라 안전 안내:</strong> 라이브 동물 눈 모드의 카메라 영상은 저장하지 않고, 서버로 보내지 않으며, 이 기기 안에서만 필터로 바뀝니다.</div>
+          <div id="menuAnimals" class="menu-animals" aria-label="동물 선택"></div>
+          <div class="mode-actions">
+            <button id="startBtn" class="primary-btn" type="button">탐험 시작!</button>
+            <button id="cameraBtn" class="primary-btn secondary-btn" type="button">📷 라이브 동물 눈</button>
+            <button id="settingsBtn" class="primary-btn secondary-btn" type="button">⚙ 보호자 설정</button>
+          </div>
+          <div id="versionPill" class="version-pill">Beta</div>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="screen hidden">
+        <div class="hud">
+          <div id="timerBadge" class="badge">⏳ 50초</div>
+          <div class="mission-board" aria-label="미션 보드">
+            <span class="mission-label">찾아라!</span>
+            <canvas id="missionCanvas" width="96" height="96" aria-hidden="true"></canvas>
+            <span id="missionName" class="mission-name">샌드위치</span>
+          </div>
+          <div id="scoreBadge" class="badge">⭐ 0점</div>
+        </div>
+        <div id="animalTabs" class="animal-tabs" aria-label="동물 시야 선택"></div>
+        <div class="control-bar" aria-label="게임 조작">
+          <button id="gameHomeBtn" class="mini-btn" type="button">🏠 처음</button>
+          <button id="pauseBtn" class="mini-btn" type="button">⏸ 쉬기</button>
+          <button id="muteBtn" class="mini-btn" type="button">🔊 소리</button>
+          <button id="compareBtn" class="mini-btn" type="button">👦 비교</button>
+          <button id="settingsGameBtn" class="mini-btn" type="button">⚙ 설정</button>
+          <span id="qualityBadge" class="status-pill">⚡ Auto</span>
+          <span id="fpsBadge" class="status-pill">FPS --</span>
+        </div>
+        <div class="canvas-frame">
+          <canvas id="gameCanvas" width="800" height="600" role="img" aria-label="동물 시각 필터가 적용된 탐험 게임 화면"></canvas>
+          <div id="pauseOverlay" class="pause-overlay hidden">⏸ 쉬는 중</div>
+        </div>
+        <div id="tipText" class="tip">동물을 고르면 눈의 구조가 바뀌어요.</div>
+      </section>
+
+      <section id="cameraScreen" class="screen hidden">
+        <div class="camera-topline">
+          <div class="badge">📷 라이브 동물 눈</div>
+          <div class="badge" id="cameraAnimalBadge">👦 사람</div>
+        </div>
+        <div id="cameraAnimalTabs" class="animal-tabs" aria-label="카메라 동물 시야 선택"></div>
+        <div class="canvas-frame">
+          <canvas id="cameraCanvas" width="800" height="600" role="img" aria-label="카메라 화면에 동물 시각 필터가 적용된 라이브 화면"></canvas>
+          <video id="cameraVideo" class="camera-video" playsinline autoplay muted></video>
+        </div>
+        <div id="cameraStatus" class="tip">카메라 권한을 허용하면 실제 주변 장면에 동물 시야 필터를 씌워 볼 수 있어요.</div>
+        <div id="cameraScienceNote" class="science-note auto-hide-note">※ 카메라 모드는 교육용 시뮬레이션입니다. 휴대폰 카메라는 실제 자외선이나 적외선 열을 직접 보여주지 못하므로, 벌의 UV와 뱀의 열화상은 화면 신호를 이용한 비유 표현입니다.</div>
+        <div class="result-actions">
+          <button id="cameraStartBtn" class="small-btn" type="button">카메라 시작</button>
+          <button id="cameraDemoBtn" class="small-btn" type="button">샘플 장면 보기</button>
+          <button id="cameraStopBtn" class="small-btn" type="button">카메라 끄기</button>
+          <button id="cameraMenuBtn" class="small-btn" type="button">처음 화면</button>
+        </div>
+        <div class="control-bar camera-bottom-controls" aria-label="카메라 조작">
+          <button id="cameraHomeTopBtn" class="mini-btn" type="button">🏠 처음</button>
+          <button id="cameraMuteBtn" class="mini-btn" type="button">🔊 소리</button>
+          <button id="cameraCompareBtn" class="mini-btn" type="button">👦 비교</button>
+          <button id="settingsCameraBtn" class="mini-btn" type="button">⚙ 설정</button>
+          <span id="cameraQualityBadge" class="status-pill">⚡ Auto</span>
+          <span id="cameraFpsBadge" class="status-pill">FPS --</span>
+        </div>
+      </section>
+
+      <section id="resultScreen" class="screen hidden">
+        <div class="glass-card result-card">
+          <h1 class="title">🔍 탐험 완료!</h1>
+          <div id="finalScore" class="score-pill">0점</div>
+          <h2 style="margin:0;color:#2e7d32;">서후의 비밀 눈 백과사전</h2>
+          <div id="eyeBook" class="eye-book"></div>
+          <div class="result-actions">
+            <button id="retryBtn" class="small-btn" type="button">다시 탐험</button>
+            <button id="menuBtn" class="small-btn" type="button">처음 화면</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+
+  <div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+  <div id="cameraConsentModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cameraConsentTitle">
+    <div class="modal-card">
+      <h2 id="cameraConsentTitle">📷 카메라 안내</h2>
+      <p>이 기능은 주변 장면에 동물 눈 필터를 씌워 보는 교육용 놀이입니다.</p>
+      <p><strong>카메라 영상은 저장하지 않고, 서버로 보내지 않으며, 이 기기 안에서만 필터로 바뀝니다.</strong></p>
+      <p>뱀의 열화상과 벌의 UV는 실제 촬영이 아니라 과학 원리를 쉽게 보여주는 비유 표현입니다.</p>
+      <div class="modal-actions">
+        <button id="cameraConsentAcceptBtn" class="small-btn" type="button">동의하고 시작</button>
+        <button id="cameraConsentDemoBtn" class="small-btn" type="button">카메라 없이 샘플 보기</button>
+        <button id="cameraConsentCancelBtn" class="small-btn" type="button">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="settingsModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-card">
+      <h2 id="settingsTitle">⚙ 보호자 설정</h2>
+      <p>기기 성능, 소리, 접근성을 아이에게 맞게 조절할 수 있어요.</p>
+      <div class="settings-grid">
+        <div class="setting-row"><div>효과음<small>정답·오답 소리를 켜거나 끕니다.</small></div><button id="soundSwitch" class="switch" type="button" aria-label="효과음 전환"></button></div>
+        <div class="setting-row"><div>음성 안내<small>한국어 TTS 안내를 켜거나 끕니다.</small></div><button id="speechSwitch" class="switch" type="button" aria-label="음성 안내 전환"></button></div>
+        <div class="setting-row"><div>진동 피드백<small>지원되는 모바일 기기에서만 동작합니다.</small></div><button id="vibrationSwitch" class="switch" type="button" aria-label="진동 전환"></button></div>
+        <div class="setting-row"><div>효과 줄이기<small>파티클과 움직임 효과를 줄여 눈의 피로와 발열을 낮춥니다.</small></div><button id="motionSwitch" class="switch" type="button" aria-label="효과 줄이기 전환"></button></div>
+        <div class="setting-row"><div>큰 글씨<small>설명과 버튼 글자를 조금 더 크게 표시합니다.</small></div><button id="largeTextSwitch" class="switch" type="button" aria-label="큰 글씨 전환"></button></div>
+        <div class="setting-row"><div>렌더링 품질<small>Auto는 FPS를 보며 자동으로 저성능 모드로 전환합니다.</small></div><select id="qualitySelect" class="select-control" aria-label="렌더링 품질"><option value="auto">Auto</option><option value="high">High 60</option><option value="medium">Medium</option><option value="low">Low</option><option value="safe">Safe</option></select></div>
+      </div>
+      <div class="privacy-box"><strong>개인정보:</strong> 로그인 없음, 위치 정보 사용 없음, 광고 추적 없음, 카메라 영상 저장·전송 없음.</div>
+      <div class="modal-actions">
+        <button id="settingsCloseBtn" class="small-btn" type="button">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const APP_VERSION = '0.9.5-beta';
+      const SETTINGS_KEY = 'nanobanana-eye-settings-v095';
+      const DEFAULT_SETTINGS = {
+        sound: true,
+        speech: true,
+        vibration: true,
+        reducedMotion: false,
+        largeText: false,
+        quality: 'auto',
+        cameraConsent: false
+      };
+      const QUALITY_PROFILES = {
+        high: { label: 'High 60', frameMs: 16.7, beeBlock: 16, particleScale: 1, motionCell: 10 },
+        medium: { label: 'Medium', frameMs: 22.2, beeBlock: 20, particleScale: 0.78, motionCell: 12 },
+        low: { label: 'Low', frameMs: 33.3, beeBlock: 28, particleScale: 0.52, motionCell: 16 },
+        safe: { label: 'Safe', frameMs: 41.7, beeBlock: 34, particleScale: 0.34, motionCell: 20 }
+      };
+      const QUALITY_ORDER = ['high', 'medium', 'low', 'safe'];
+
+      function loadSettings() {
+        try {
+          const raw = localStorage.getItem(SETTINGS_KEY);
+          return Object.assign({}, DEFAULT_SETTINGS, raw ? JSON.parse(raw) : {});
+        } catch (_) {
+          return Object.assign({}, DEFAULT_SETTINGS);
+        }
+      }
+
+      const settings = loadSettings();
+
+      const W = 800;
+      const H = 600;
+      const TWO_PI = Math.PI * 2;
+      const ICONS = ['mouse', 'frog', 'flower', 'sandwich', 'rice', 'ball', 'leaf'];
+      const ICON_LABEL = {
+        mouse: '생쥐', frog: '개구리', flower: '꽃', sandwich: '샌드위치', rice: '밥', ball: '공', leaf: '촉촉한 낙엽'
+      };
+
+      const ANIMALS = {
+        human: {
+          id: 'human', emoji: '👦', name: '사람', target: 'sandwich',
+          short: '사람 눈은 색과 모양을 균형 있게 보아요.',
+          kid: '사람 눈은 오늘의 기준 화면이에요.',
+          guide: '사람 눈으로 샌드위치를 찾아 보자! 색과 모양을 그대로 볼 수 있어.',
+          truth: '사람은 세 종류의 원뿔세포가 있어 색 차이를 비교적 세밀하게 구분해요.',
+          app: '게임에서는 사람 모드를 기준 화면으로 두고, 다른 동물 모드와 비교할 수 있게 했어요.',
+          survival: '다양한 색과 모양을 구분하는 능력은 익은 열매, 도구, 표정 같은 단서를 읽는 데 도움을 줘요.',
+          caution: '사람 눈이 기준이지만, 모든 생물이 사람처럼 보는 것은 아니에요.'
+        },
+        dog: {
+          id: 'dog', emoji: '🐶', name: '강아지', target: 'ball',
+          short: '강아지는 빨강과 초록을 비슷하게 보고 냄새 단서를 잘 써요.',
+          kid: '강아지는 색보다 냄새와 움직임 단서를 많이 써요.',
+          guide: '강아지 눈으로 공을 찾아 보자! 빨강과 초록은 비슷하게 보이고, 냄새 점들이 길을 알려 줄 거야.',
+          truth: '강아지는 사람보다 색 구분이 단순한 이색형 색각에 가까워 빨강·초록 차이가 약해요.',
+          app: '적록색 차이를 줄이는 색각 매트릭스를 적용하고, 공 주변에는 냄새 단서처럼 움직이는 입자를 추가했어요.',
+          survival: '개는 눈만 쓰지 않아요. 후각, 청각, 움직임 감지가 함께 작동해서 먹이와 장난감을 찾아요.',
+          caution: '개가 세상을 흑백으로만 보는 것은 아니에요. 파랑·노랑 계열은 구분할 수 있어요.'
+        },
+        snake: {
+          id: 'snake', emoji: '🐍', name: '뱀', target: 'mouse',
+          short: '일부 뱀은 눈이 아니라 피트 기관으로 따뜻한 먹이를 감지해요.',
+          kid: '따뜻한 생쥐가 더 잘 보이는 비유 화면이에요.',
+          guide: '뱀 모드야! 생쥐처럼 따뜻한 동물은 밝게 보이고, 개구리나 물은 더 차갑게 보일 거야.',
+          truth: '모든 뱀이 열화상을 보는 것은 아니고, 일부 뱀은 피트 기관으로 적외선 열 차이를 감지해요.',
+          app: '게임 모드는 픽셀 밝기가 아니라 생쥐·개구리·물·땅에 가상의 체온 값을 부여한 온도 지도를 사용해요.',
+          survival: '어두운 곳에서도 따뜻한 먹이를 찾는 데 유리하지만, 실제 감각은 고해상도 열화상 카메라처럼 선명하지 않아요.',
+          caution: '모든 뱀이 열을 감지하는 것은 아니며, 카메라 모드의 열화상은 실제 적외선 촬영이 아니에요.'
+        },
+        bee: {
+          id: 'bee', emoji: '🐝', name: '벌', target: 'flower',
+          short: '벌은 낱눈과 꽃의 숨은 UV 길잡이를 이용해요.',
+          kid: '벌은 꽃 가운데로 가는 숨은 길을 잘 찾아요.',
+          guide: '벌 눈으로 꽃을 찾아 보자! 꽃 가운데의 숨은 길잡이 무늬가 보라빛으로 강해질 거야.',
+          truth: '벌은 겹눈으로 세상을 조각내어 보고, 사람에게 보이지 않는 자외선 무늬도 꽃 찾기에 활용해요.',
+          app: '화면은 실제 자외선을 낼 수 없어서 UV 반사 지도를 보라색 교육 색으로 약속해 보여줘요.',
+          survival: '꽃의 UV 넥타 가이드는 벌이 꿀과 꽃가루가 있는 중심으로 빠르게 가도록 도와요.',
+          caution: '일반 화면은 진짜 자외선을 보여주지 못해요. 보라색은 교육용 약속 색이에요.'
+        },
+        worm: {
+          id: 'worm', emoji: '🐛', name: '지렁이', target: 'leaf',
+          short: '지렁이는 상을 맺는 눈보다 빛, 습기, 진동 단서를 써요.',
+          kid: '밝은 그림보다 촉촉한 흙과 진동 단서를 따라가요.',
+          guide: '지렁이 모드야! 밝은 곳은 피하고, 촉촉한 낙엽에서 퍼지는 진동 파동을 따라가 보자.',
+          truth: '지렁이는 사람처럼 이미지를 보는 눈이 없지만, 빛 변화와 땅의 진동, 습한 환경 단서를 감지해요.',
+          app: '전체 화면을 어둡게 하고 촉촉한 낙엽 위치에서 레이더 파동을 퍼뜨려 비시각 감각을 비유했어요.',
+          survival: '밝고 건조한 곳은 위험할 수 있어요. 지렁이는 어둡고 촉촉한 흙 속 유기물을 먹으며 살아가요.',
+          caution: '지렁이가 귀로 소리를 듣는다는 뜻은 아니에요. 이 앱의 파동은 진동·습기·빛 단서를 비유한 표현이에요.'
+        },
+        fish: {
+          id: 'fish', emoji: '🐠', name: '물고기', target: 'frog',
+          short: '물고기는 수면 위 세상을 둥근 스넬의 창으로 봐요.',
+          kid: '물속에서 위를 보면 둥근 창처럼 휘어 보여요.',
+          guide: '물고기 눈으로 개구리를 찾아 보자! 둥근 창 안은 휘고 가장자리는 반짝일 거야.',
+          truth: '스넬의 창은 물고기 눈만의 렌즈 효과가 아니라 공기와 물 경계에서 빛이 굴절되며 생기는 현상이에요.',
+          app: '가운데 둥근 영역은 굴절되어 압축되고, 바깥 영역은 전반사처럼 어둡게 반사되도록 만들었어요.',
+          survival: '물속 동물은 수면 위 그림자와 움직임을 읽어 먹이와 위험을 파악할 수 있어요.',
+          caution: '스넬의 창은 물고기 눈 자체가 아니라 물과 공기 경계에서 생기는 굴절 효과예요.'
+        }
+      };
+
+      const animalOrder = ['human', 'dog', 'snake', 'bee', 'worm', 'fish'];
+
+      const dom = {
+        menuScreen: document.getElementById('menuScreen'),
+        gameScreen: document.getElementById('gameScreen'),
+        cameraScreen: document.getElementById('cameraScreen'),
+        resultScreen: document.getElementById('resultScreen'),
+        menuAnimals: document.getElementById('menuAnimals'),
+        animalTabs: document.getElementById('animalTabs'),
+        cameraAnimalTabs: document.getElementById('cameraAnimalTabs'),
+        startBtn: document.getElementById('startBtn'),
+        cameraBtn: document.getElementById('cameraBtn'),
+        settingsBtn: document.getElementById('settingsBtn'),
+        gameHomeBtn: document.getElementById('gameHomeBtn'),
+        pauseBtn: document.getElementById('pauseBtn'),
+        muteBtn: document.getElementById('muteBtn'),
+        compareBtn: document.getElementById('compareBtn'),
+        settingsGameBtn: document.getElementById('settingsGameBtn'),
+        qualityBadge: document.getElementById('qualityBadge'),
+        fpsBadge: document.getElementById('fpsBadge'),
+        pauseOverlay: document.getElementById('pauseOverlay'),
+        retryBtn: document.getElementById('retryBtn'),
+        menuBtn: document.getElementById('menuBtn'),
+        cameraStartBtn: document.getElementById('cameraStartBtn'),
+        cameraStopBtn: document.getElementById('cameraStopBtn'),
+        cameraMenuBtn: document.getElementById('cameraMenuBtn'),
+        cameraDemoBtn: document.getElementById('cameraDemoBtn'),
+        cameraHomeTopBtn: document.getElementById('cameraHomeTopBtn'),
+        cameraMuteBtn: document.getElementById('cameraMuteBtn'),
+        cameraCompareBtn: document.getElementById('cameraCompareBtn'),
+        settingsCameraBtn: document.getElementById('settingsCameraBtn'),
+        cameraQualityBadge: document.getElementById('cameraQualityBadge'),
+        cameraFpsBadge: document.getElementById('cameraFpsBadge'),
+        timerBadge: document.getElementById('timerBadge'),
+        scoreBadge: document.getElementById('scoreBadge'),
+        tipText: document.getElementById('tipText'),
+        finalScore: document.getElementById('finalScore'),
+        eyeBook: document.getElementById('eyeBook'),
+        missionName: document.getElementById('missionName'),
+        missionCanvas: document.getElementById('missionCanvas'),
+        gameCanvas: document.getElementById('gameCanvas'),
+        cameraCanvas: document.getElementById('cameraCanvas'),
+        cameraVideo: document.getElementById('cameraVideo'),
+        cameraStatus: document.getElementById('cameraStatus'),
+        cameraScienceNote: document.getElementById('cameraScienceNote'),
+        cameraAnimalBadge: document.getElementById('cameraAnimalBadge'),
+        liveStatus: document.getElementById('liveStatus'),
+        versionPill: document.getElementById('versionPill'),
+        cameraConsentModal: document.getElementById('cameraConsentModal'),
+        cameraConsentAcceptBtn: document.getElementById('cameraConsentAcceptBtn'),
+        cameraConsentDemoBtn: document.getElementById('cameraConsentDemoBtn'),
+        cameraConsentCancelBtn: document.getElementById('cameraConsentCancelBtn'),
+        settingsModal: document.getElementById('settingsModal'),
+        settingsCloseBtn: document.getElementById('settingsCloseBtn'),
+        soundSwitch: document.getElementById('soundSwitch'),
+        speechSwitch: document.getElementById('speechSwitch'),
+        vibrationSwitch: document.getElementById('vibrationSwitch'),
+        motionSwitch: document.getElementById('motionSwitch'),
+        largeTextSwitch: document.getElementById('largeTextSwitch'),
+        qualitySelect: document.getElementById('qualitySelect')
+      };
+
+      const ctx = dom.gameCanvas.getContext('2d', { willReadFrequently: true });
+      const cameraCtx = dom.cameraCanvas.getContext('2d', { willReadFrequently: true });
+      const missionCtx = dom.missionCanvas.getContext('2d');
+      const baseCanvas = document.createElement('canvas');
+      baseCanvas.width = W;
+      baseCanvas.height = H;
+      const baseCtx = baseCanvas.getContext('2d', { willReadFrequently: true });
+      const filteredCanvas = document.createElement('canvas');
+      filteredCanvas.width = W;
+      filteredCanvas.height = H;
+      const filteredCtx = filteredCanvas.getContext('2d', { willReadFrequently: true });
+      const heatCanvas = document.createElement('canvas');
+      heatCanvas.width = W;
+      heatCanvas.height = H;
+      const heatCtx = heatCanvas.getContext('2d', { willReadFrequently: true });
+      const uvCanvas = document.createElement('canvas');
+      uvCanvas.width = W;
+      uvCanvas.height = H;
+      const uvCtx = uvCanvas.getContext('2d', { willReadFrequently: true });
+      const fishImage = ctx.createImageData(W, H);
+      const cameraFishImage = cameraCtx.createImageData(W, H);
+      const fishMap = buildFishMap();
+      const snakePalette = buildSnakePalette();
+
+      let audioCtx = null;
+      let timerId = 0;
+      let rafId = 0;
+      let cameraStream = null;
+      let cameraScienceNoteTimer = null;
+      let prevMotionGray = null;
+
+      const state = {
+        mode: 'menu',
+        animal: 'human',
+        paused: false,
+        compare: false,
+        cameraDemo: false,
+        score: 0,
+        timeLeft: 50,
+        entities: [],
+        particles: [],
+        explored: new Set(['human']),
+        lastFrame: 0,
+        round: 0,
+        manualRipples: [],
+        motionPulse: null,
+        perf: {
+          frames: 0,
+          fps: 0,
+          lastFpsTime: 0,
+          lastRender: 0,
+          level: 'high',
+          lowSince: 0,
+          highSince: 0
+        }
+      };
+
+      function clamp(v, min = 0, max = 255) {
+        return v < min ? min : (v > max ? max : v);
+      }
+
+      function rand(min, max) {
+        return min + Math.random() * (max - min);
+      }
+
+      function saveSettings() {
+        try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (_) {}
+      }
+
+      function setLive(text) {
+        if (dom.liveStatus) dom.liveStatus.textContent = text;
+      }
+
+      function currentQualityKey() {
+        return settings.quality === 'auto' ? state.perf.level : settings.quality;
+      }
+
+      function currentQuality() {
+        return QUALITY_PROFILES[currentQualityKey()] || QUALITY_PROFILES.high;
+      }
+
+      function updatePerfBadges() {
+        const key = currentQualityKey();
+        const profile = currentQuality();
+        const auto = settings.quality === 'auto' ? 'Auto ' : '';
+        const qText = `⚡ ${auto}${profile.label}`;
+        const fpsText = state.perf.fps ? `FPS ${Math.round(state.perf.fps)}` : 'FPS --';
+        if (dom.qualityBadge) dom.qualityBadge.textContent = qText;
+        if (dom.cameraQualityBadge) dom.cameraQualityBadge.textContent = qText;
+        if (dom.fpsBadge) dom.fpsBadge.textContent = fpsText;
+        if (dom.cameraFpsBadge) dom.cameraFpsBadge.textContent = fpsText;
+      }
+
+      function resetPerf() {
+        state.perf.frames = 0;
+        state.perf.fps = 0;
+        state.perf.lastFpsTime = performance.now();
+        state.perf.lastRender = 0;
+        state.perf.lowSince = 0;
+        state.perf.highSince = 0;
+        state.perf.level = settings.quality === 'auto' ? 'high' : settings.quality;
+        updatePerfBadges();
+      }
+
+      function recordFrame(now) {
+        const perf = state.perf;
+        if (!perf.lastFpsTime) perf.lastFpsTime = now;
+        perf.frames++;
+        const elapsed = now - perf.lastFpsTime;
+        if (elapsed < 1000) return;
+        perf.fps = perf.frames * 1000 / elapsed;
+        perf.frames = 0;
+        perf.lastFpsTime = now;
+
+        if (settings.quality === 'auto') {
+          const idx = QUALITY_ORDER.indexOf(perf.level);
+          if (perf.fps < 38 && idx < QUALITY_ORDER.length - 1) {
+            perf.lowSince = perf.lowSince || now;
+            if (now - perf.lowSince > 1500) {
+              perf.level = QUALITY_ORDER[idx + 1];
+              perf.lowSince = 0;
+              perf.highSince = 0;
+              updateCameraStatus('기기가 조금 바빠 보여서 자동으로 부드러운 저성능 모드로 바꿨어요.');
+            }
+          } else {
+            perf.lowSince = 0;
+          }
+          if (perf.fps > 55 && idx > 0) {
+            perf.highSince = perf.highSince || now;
+            if (now - perf.highSince > 8000) {
+              perf.level = QUALITY_ORDER[idx - 1];
+              perf.highSince = 0;
+            }
+          } else {
+            perf.highSince = 0;
+          }
+        }
+        updatePerfBadges();
+      }
+
+      function shouldRenderThisFrame(now) {
+        const profile = currentQuality();
+        if (!state.perf.lastRender || now - state.perf.lastRender >= profile.frameMs) {
+          state.perf.lastRender = now;
+          recordFrame(now);
+          return true;
+        }
+        return false;
+      }
+
+      function buildSnakePalette() {
+        const arr = new Uint8ClampedArray(256 * 3);
+        for (let l = 0; l < 256; l++) {
+          const q = l < 62 ? 0 : (l < 126 ? 1 : (l < 190 ? 2 : 3));
+          let r, g, b;
+          if (q === 0) {
+            const t = l / 62;
+            r = 0; g = 22 + 18 * t; b = 92 + 120 * t;
+          } else if (q === 1) {
+            const t = (l - 62) / 64;
+            r = 40 + 210 * t; g = 12 + 28 * (1 - t); b = 230 * (1 - t);
+          } else if (q === 2) {
+            const t = (l - 126) / 64;
+            r = 255; g = 70 + 170 * t; b = 0;
+          } else {
+            const t = (l - 190) / 65;
+            r = 255; g = 238 + 17 * t; b = 215 + 40 * t;
+          }
+          const i = l * 3;
+          arr[i] = clamp(r);
+          arr[i + 1] = clamp(g);
+          arr[i + 2] = clamp(b);
+        }
+        return arr;
+      }
+
+      function applySettingsToUI() {
+        document.body.classList.toggle('reduced-motion', !!settings.reducedMotion);
+        document.body.classList.toggle('large-text', !!settings.largeText);
+        const pairs = [
+          [dom.soundSwitch, settings.sound],
+          [dom.speechSwitch, settings.speech],
+          [dom.vibrationSwitch, settings.vibration],
+          [dom.motionSwitch, settings.reducedMotion],
+          [dom.largeTextSwitch, settings.largeText]
+        ];
+        pairs.forEach(([el, on]) => {
+          if (!el) return;
+          el.classList.toggle('on', !!on);
+          el.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        if (dom.qualitySelect) dom.qualitySelect.value = settings.quality;
+        syncMuteButtons();
+        updatePerfBadges();
+      }
+
+      function syncMuteButtons() {
+        const muted = !settings.sound && !settings.speech;
+        const label = muted ? '🔇 소리 꺼짐' : '🔊 소리';
+        [dom.muteBtn, dom.cameraMuteBtn].forEach(btn => {
+          if (!btn) return;
+          btn.textContent = label;
+          btn.classList.toggle('active', muted);
+        });
+      }
+
+      function quickToggleSound() {
+        const currentlyOn = settings.sound || settings.speech;
+        settings.sound = !currentlyOn;
+        settings.speech = !currentlyOn;
+        saveSettings();
+        applySettingsToUI();
+        setLive(settings.sound ? '소리를 켰어요.' : '소리를 껐어요.');
+        if (!settings.speech && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+
+      function toggleSetting(key) {
+        settings[key] = !settings[key];
+        if (key === 'reducedMotion' && settings.reducedMotion) state.particles.length = 0;
+        saveSettings();
+        applySettingsToUI();
+      }
+
+      function openSettings() {
+        applySettingsToUI();
+        dom.settingsModal.classList.remove('hidden');
+      }
+
+      function closeSettings() {
+        dom.settingsModal.classList.add('hidden');
+      }
+
+      function updateCompareButtons() {
+        const label = state.compare ? '👦 비교 켜짐' : '👦 비교';
+        [dom.compareBtn, dom.cameraCompareBtn].forEach(btn => {
+          if (!btn) return;
+          btn.textContent = label;
+          btn.classList.toggle('active', state.compare);
+        });
+      }
+
+      function toggleCompare() {
+        state.compare = !state.compare;
+        updateCompareButtons();
+        setLive(state.compare ? '사람 눈과 동물 눈 비교를 켰어요.' : '비교 모드를 껐어요.');
+      }
+
+      function togglePause() {
+        if (state.mode !== 'playing') return;
+        state.paused = !state.paused;
+        dom.pauseOverlay.classList.toggle('hidden', !state.paused);
+        dom.pauseBtn.textContent = state.paused ? '▶ 계속' : '⏸ 쉬기';
+        setLive(state.paused ? '게임을 잠시 멈췄어요.' : '게임을 다시 시작했어요.');
+        if (state.paused && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+
+
+      function roundedRect(ctx2, x, y, w, h, r) {
+        const rr = Math.min(r, w / 2, h / 2);
+        ctx2.beginPath();
+        ctx2.moveTo(x + rr, y);
+        ctx2.lineTo(x + w - rr, y);
+        ctx2.quadraticCurveTo(x + w, y, x + w, y + rr);
+        ctx2.lineTo(x + w, y + h - rr);
+        ctx2.quadraticCurveTo(x + w, y + h, x + w - rr, y + h);
+        ctx2.lineTo(x + rr, y + h);
+        ctx2.quadraticCurveTo(x, y + h, x, y + h - rr);
+        ctx2.lineTo(x, y + rr);
+        ctx2.quadraticCurveTo(x, y, x + rr, y);
+        ctx2.closePath();
+      }
+
+      function shade(ctx2, x, y, rx, ry, alpha = 0.16) {
+        ctx2.save();
+        ctx2.globalAlpha = alpha;
+        ctx2.fillStyle = '#263238';
+        ctx2.beginPath();
+        ctx2.ellipse(x, y, rx, ry, 0, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.restore();
+      }
+
+      function starPath(ctx2, r1, r2, points) {
+        ctx2.beginPath();
+        for (let i = 0; i < points * 2; i++) {
+          const r = i % 2 === 0 ? r1 : r2;
+          const a = -Math.PI / 2 + i * Math.PI / points;
+          const x = Math.cos(a) * r;
+          const y = Math.sin(a) * r;
+          if (i === 0) ctx2.moveTo(x, y);
+          else ctx2.lineTo(x, y);
+        }
+        ctx2.closePath();
+      }
+
+      function drawWorld(ctx2, time) {
+        const sky = ctx2.createLinearGradient(0, 0, 0, H);
+        sky.addColorStop(0, '#5ecbff');
+        sky.addColorStop(0.62, '#c8f3ff');
+        sky.addColorStop(1, '#e8f5e9');
+        ctx2.fillStyle = sky;
+        ctx2.fillRect(0, 0, W, H);
+
+        // Sun and clouds
+        const sun = ctx2.createRadialGradient(655, 94, 8, 655, 94, 72);
+        sun.addColorStop(0, '#fffde7');
+        sun.addColorStop(0.55, '#ffeb3b');
+        sun.addColorStop(1, 'rgba(255, 193, 7, 0)');
+        ctx2.fillStyle = sun;
+        ctx2.beginPath();
+        ctx2.arc(655, 94, 72, 0, TWO_PI);
+        ctx2.fill();
+        drawCloud(ctx2, 135, 95, 0.9);
+        drawCloud(ctx2, 505, 138, 0.72);
+        drawCloud(ctx2, 310, 70, 0.54);
+
+        // Hills
+        ctx2.fillStyle = '#82c784';
+        ctx2.beginPath();
+        ctx2.moveTo(0, 430);
+        ctx2.bezierCurveTo(150, 260, 270, 310, 398, 430);
+        ctx2.lineTo(0, H);
+        ctx2.closePath();
+        ctx2.fill();
+
+        ctx2.fillStyle = '#67b96d';
+        ctx2.beginPath();
+        ctx2.moveTo(250, 430);
+        ctx2.bezierCurveTo(430, 250, 610, 295, 800, 420);
+        ctx2.lineTo(800, H);
+        ctx2.lineTo(250, H);
+        ctx2.closePath();
+        ctx2.fill();
+
+        // Pond
+        const pond = ctx2.createRadialGradient(585, 505, 20, 585, 505, 190);
+        pond.addColorStop(0, '#80deea');
+        pond.addColorStop(0.72, '#4dd0e1');
+        pond.addColorStop(1, '#26a69a');
+        ctx2.fillStyle = pond;
+        ctx2.beginPath();
+        ctx2.ellipse(590, 512, 210, 72, -0.02, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.globalAlpha = 0.35;
+        ctx2.strokeStyle = '#ffffff';
+        ctx2.lineWidth = 3;
+        for (let i = 0; i < 4; i++) {
+          ctx2.beginPath();
+          ctx2.ellipse(540 + i * 32, 505 + Math.sin(time * 0.001 + i) * 5, 35 + i * 7, 9, 0, 0, TWO_PI);
+          ctx2.stroke();
+        }
+        ctx2.globalAlpha = 1;
+
+        // Ground and flowers
+        ctx2.fillStyle = '#8bc34a';
+        ctx2.beginPath();
+        ctx2.moveTo(0, 500);
+        ctx2.quadraticCurveTo(200, 462, 410, 500);
+        ctx2.quadraticCurveTo(610, 540, 800, 502);
+        ctx2.lineTo(800, H);
+        ctx2.lineTo(0, H);
+        ctx2.closePath();
+        ctx2.fill();
+
+        for (let i = 0; i < 36; i++) {
+          const x = (i * 67 + 37) % W;
+          const y = 522 + ((i * 31) % 68);
+          ctx2.strokeStyle = i % 2 ? '#5aa65d' : '#4caf50';
+          ctx2.lineWidth = 2;
+          ctx2.beginPath();
+          ctx2.moveTo(x, y + 14);
+          ctx2.quadraticCurveTo(x + Math.sin(i) * 9, y + 3, x + Math.cos(i) * 8, y - 8);
+          ctx2.stroke();
+        }
+
+        if (state.animal === 'dog') drawScentTrail(ctx2, time);
+
+        state.entities.forEach(ent => {
+          ctx2.save();
+          ctx2.translate(ent.x, ent.y);
+          ctx2.rotate(ent.angle);
+          const bounce = 1 + Math.sin(time * 0.006 + ent.seed) * 0.035;
+          ctx2.scale(ent.scale * bounce, ent.scale * bounce);
+          drawIcon(ctx2, ent.icon, ent.isTarget);
+          ctx2.restore();
+        });
+      }
+
+      function drawCloud(ctx2, x, y, s) {
+        ctx2.save();
+        ctx2.translate(x, y);
+        ctx2.scale(s, s);
+        ctx2.fillStyle = 'rgba(255,255,255,0.86)';
+        ctx2.beginPath();
+        ctx2.arc(-32, 8, 25, 0, TWO_PI);
+        ctx2.arc(-8, -7, 30, 0, TWO_PI);
+        ctx2.arc(25, 4, 26, 0, TWO_PI);
+        ctx2.arc(52, 14, 18, 0, TWO_PI);
+        ctx2.rect(-42, 8, 94, 28);
+        ctx2.fill();
+        ctx2.restore();
+      }
+
+      function drawIcon(ctx2, icon, isTarget = false) {
+        ctx2.save();
+        if (isTarget) {
+          ctx2.shadowColor = 'rgba(255, 235, 59, 0.62)';
+          ctx2.shadowBlur = 14;
+        } else {
+          ctx2.shadowColor = 'rgba(38, 50, 56, 0.18)';
+          ctx2.shadowBlur = 8;
+        }
+        if (icon === 'mouse') drawMouse(ctx2);
+        else if (icon === 'frog') drawFrog(ctx2);
+        else if (icon === 'flower') drawFlower(ctx2);
+        else if (icon === 'sandwich') drawSandwich(ctx2);
+        else if (icon === 'rice') drawRice(ctx2);
+        else if (icon === 'ball') drawBall(ctx2);
+        else if (icon === 'leaf') drawLeaf(ctx2);
+        ctx2.restore();
+      }
+
+      function drawMouse(ctx2) {
+        shade(ctx2, -4, 40, 45, 10, 0.13);
+        ctx2.save();
+        ctx2.lineCap = 'round';
+        ctx2.lineJoin = 'round';
+        ctx2.strokeStyle = '#b98b8f';
+        ctx2.lineWidth = 6;
+        ctx2.beginPath();
+        ctx2.moveTo(-25, 18);
+        ctx2.bezierCurveTo(-55, 34, -72, 2, -48, -12);
+        ctx2.bezierCurveTo(-28, -24, -35, -43, -58, -35);
+        ctx2.stroke();
+
+        const body = ctx2.createRadialGradient(-8, -2, 5, -3, 8, 40);
+        body.addColorStop(0, '#f5f5f5');
+        body.addColorStop(0.68, '#d0d3d7');
+        body.addColorStop(1, '#9ea7ad');
+        ctx2.fillStyle = body;
+        ctx2.beginPath();
+        ctx2.ellipse(-6, 8, 35, 25, -0.05, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.fillStyle = '#c6ccd1';
+        ctx2.beginPath();
+        ctx2.arc(22, -5, 20, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.fillStyle = '#b9c0c7';
+        ctx2.beginPath();
+        ctx2.arc(8, -25, 13, 0, TWO_PI);
+        ctx2.arc(30, -25, 11, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.fillStyle = '#ffc2ca';
+        ctx2.beginPath();
+        ctx2.arc(8, -25, 7, 0, TWO_PI);
+        ctx2.arc(30, -25, 6, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.fillStyle = '#263238';
+        ctx2.beginPath();
+        ctx2.arc(31, -8, 3.3, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.fillStyle = '#ff8a9a';
+        ctx2.beginPath();
+        ctx2.arc(42, -1, 4.2, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.strokeStyle = '#6d747a';
+        ctx2.lineWidth = 1.8;
+        for (let i = -1; i <= 1; i++) {
+          ctx2.beginPath();
+          ctx2.moveTo(35, -1);
+          ctx2.lineTo(52, i * 8 - 1);
+          ctx2.stroke();
+        }
+
+        ctx2.strokeStyle = '#8e9aa1';
+        ctx2.lineWidth = 4;
+        ctx2.beginPath();
+        ctx2.moveTo(-18, 24);
+        ctx2.lineTo(-24, 32);
+        ctx2.moveTo(5, 25);
+        ctx2.lineTo(12, 33);
+        ctx2.stroke();
+        ctx2.restore();
+      }
+
+      function drawFrog(ctx2) {
+        shade(ctx2, 0, 42, 48, 11, 0.13);
+        ctx2.save();
+        ctx2.lineCap = 'round';
+        ctx2.lineJoin = 'round';
+
+        ctx2.strokeStyle = '#2e7d32';
+        ctx2.lineWidth = 10;
+        ctx2.beginPath();
+        ctx2.moveTo(-27, 15);
+        ctx2.quadraticCurveTo(-48, 24, -42, 43);
+        ctx2.moveTo(27, 15);
+        ctx2.quadraticCurveTo(48, 24, 42, 43);
+        ctx2.moveTo(-18, 22);
+        ctx2.quadraticCurveTo(-38, 36, -16, 41);
+        ctx2.moveTo(18, 22);
+        ctx2.quadraticCurveTo(38, 36, 16, 41);
+        ctx2.stroke();
+
+        const body = ctx2.createRadialGradient(-12, -12, 4, 0, 12, 48);
+        body.addColorStop(0, '#a5d66d');
+        body.addColorStop(0.52, '#4caf50');
+        body.addColorStop(1, '#1b5e20');
+        ctx2.fillStyle = body;
+        ctx2.beginPath();
+        ctx2.ellipse(0, 10, 38, 30, 0, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.fillStyle = '#76c75d';
+        ctx2.beginPath();
+        ctx2.ellipse(0, -4, 34, 24, 0, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.fillStyle = '#89d26b';
+        ctx2.beginPath();
+        ctx2.arc(-22, -24, 14, 0, TWO_PI);
+        ctx2.arc(22, -24, 14, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.fillStyle = '#fffde7';
+        ctx2.beginPath();
+        ctx2.arc(-22, -24, 9, 0, TWO_PI);
+        ctx2.arc(22, -24, 9, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.fillStyle = '#263238';
+        ctx2.beginPath();
+        ctx2.arc(-20, -23, 4, 0, TWO_PI);
+        ctx2.arc(20, -23, 4, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.strokeStyle = '#1b5e20';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        ctx2.moveTo(-18, 2);
+        ctx2.quadraticCurveTo(0, 13, 18, 2);
+        ctx2.stroke();
+
+        ctx2.fillStyle = 'rgba(27,94,32,0.28)';
+        [-14, 8, 19].forEach((x, i) => {
+          ctx2.beginPath();
+          ctx2.arc(x, 13 + i * 3, 4.2, 0, TWO_PI);
+          ctx2.fill();
+        });
+        ctx2.restore();
+      }
+
+      function drawFlower(ctx2) {
+        shade(ctx2, 0, 44, 34, 8, 0.11);
+        ctx2.save();
+        ctx2.lineCap = 'round';
+        ctx2.strokeStyle = '#3f8f42';
+        ctx2.lineWidth = 5;
+        ctx2.beginPath();
+        ctx2.moveTo(0, 22);
+        ctx2.quadraticCurveTo(-8, 44, -2, 52);
+        ctx2.stroke();
+        ctx2.fillStyle = '#66bb6a';
+        ctx2.beginPath();
+        ctx2.ellipse(-12, 35, 13, 6, -0.45, 0, TWO_PI);
+        ctx2.ellipse(13, 39, 12, 6, 0.42, 0, TWO_PI);
+        ctx2.fill();
+
+        const colors = ['#ff80ab', '#ec407a', '#d81b60', '#ab47bc', '#7e57c2'];
+        for (let layer = 0; layer < 5; layer++) {
+          const radius = 13 + layer * 4.4;
+          const petalX = 10.5 - layer * 0.6;
+          const petalY = 18 - layer * 0.9;
+          ctx2.fillStyle = colors[layer];
+          ctx2.globalAlpha = 0.92 - layer * 0.08;
+          for (let i = 0; i < 5; i++) {
+            ctx2.save();
+            ctx2.rotate(i * TWO_PI / 5 + layer * 0.09);
+            ctx2.beginPath();
+            ctx2.ellipse(0, -radius, petalX, petalY, 0, 0, TWO_PI);
+            ctx2.fill();
+            ctx2.restore();
+          }
+        }
+        ctx2.globalAlpha = 1;
+
+        const center = ctx2.createRadialGradient(0, 0, 2, 0, 0, 17);
+        center.addColorStop(0, '#fff59d');
+        center.addColorStop(0.48, '#ffca28');
+        center.addColorStop(1, '#5e35b1');
+        ctx2.fillStyle = center;
+        ctx2.beginPath();
+        ctx2.arc(0, 0, 17, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.strokeStyle = 'rgba(49,27,146,0.52)';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        ctx2.arc(0, 0, 8, 0, TWO_PI);
+        ctx2.stroke();
+        ctx2.restore();
+      }
+
+      function drawSandwich(ctx2) {
+        shade(ctx2, 0, 43, 45, 9, 0.13);
+        ctx2.save();
+        ctx2.lineJoin = 'round';
+        ctx2.lineCap = 'round';
+
+        // Back bread
+        ctx2.fillStyle = '#f6c56e';
+        ctx2.strokeStyle = '#d28b35';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        ctx2.moveTo(-42, -18);
+        ctx2.lineTo(34, -34);
+        ctx2.lineTo(44, 15);
+        ctx2.lineTo(-29, 34);
+        ctx2.closePath();
+        ctx2.fill();
+        ctx2.stroke();
+
+        // Lettuce wave
+        ctx2.fillStyle = '#66bb6a';
+        ctx2.beginPath();
+        ctx2.moveTo(-38, -4);
+        for (let x = -38; x <= 42; x += 10) {
+          ctx2.quadraticCurveTo(x + 5, -14 + Math.sin(x) * 2, x + 10, -4);
+        }
+        ctx2.lineTo(38, 8);
+        for (let x = 38; x >= -38; x -= 10) {
+          ctx2.quadraticCurveTo(x - 5, 17 + Math.cos(x) * 2, x - 10, 8);
+        }
+        ctx2.closePath();
+        ctx2.fill();
+
+        // Cheese and tomato/ham layers
+        ctx2.fillStyle = '#ffeb3b';
+        ctx2.beginPath();
+        ctx2.moveTo(-35, 4);
+        ctx2.lineTo(39, -9);
+        ctx2.lineTo(35, 16);
+        ctx2.lineTo(-30, 28);
+        ctx2.closePath();
+        ctx2.fill();
+        ctx2.fillStyle = '#ef5350';
+        ctx2.beginPath();
+        ctx2.ellipse(-9, 4, 14, 8, -0.18, 0, TWO_PI);
+        ctx2.ellipse(19, -1, 14, 8, -0.18, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.fillStyle = '#f48fb1';
+        ctx2.beginPath();
+        ctx2.moveTo(-30, 15);
+        ctx2.lineTo(40, 1);
+        ctx2.lineTo(36, 22);
+        ctx2.lineTo(-25, 36);
+        ctx2.closePath();
+        ctx2.fill();
+
+        // Front bread
+        const bread = ctx2.createLinearGradient(-40, -2, 42, 34);
+        bread.addColorStop(0, '#ffe0a3');
+        bread.addColorStop(0.65, '#f4b35c');
+        bread.addColorStop(1, '#d18a32');
+        ctx2.fillStyle = bread;
+        ctx2.strokeStyle = '#b86d24';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        ctx2.moveTo(-43, -5);
+        ctx2.lineTo(42, -22);
+        ctx2.lineTo(43, 24);
+        ctx2.lineTo(-31, 43);
+        ctx2.closePath();
+        ctx2.fill();
+        ctx2.stroke();
+
+        ctx2.strokeStyle = 'rgba(255,255,255,0.45)';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        ctx2.moveTo(-25, -1);
+        ctx2.lineTo(26, -12);
+        ctx2.stroke();
+        ctx2.fillStyle = '#8d5a27';
+        [[-14, 9], [3, 4], [21, 16]].forEach(([x, y]) => {
+          ctx2.beginPath();
+          ctx2.arc(x, y, 2.2, 0, TWO_PI);
+          ctx2.fill();
+        });
+        ctx2.restore();
+      }
+
+      function drawRice(ctx2) {
+        shade(ctx2, 0, 43, 40, 8, 0.12);
+        ctx2.save();
+        ctx2.lineCap = 'round';
+        ctx2.fillStyle = '#fdfdfd';
+        ctx2.beginPath();
+        ctx2.ellipse(0, -2, 34, 21, 0, Math.PI, TWO_PI);
+        ctx2.ellipse(0, -2, 34, 18, 0, 0, Math.PI);
+        ctx2.fill();
+
+        ctx2.fillStyle = '#ffffff';
+        for (let i = 0; i < 18; i++) {
+          const x = -26 + (i % 6) * 10 + Math.sin(i * 2.1) * 2;
+          const y = -15 + Math.floor(i / 6) * 9 + Math.cos(i) * 2;
+          ctx2.beginPath();
+          ctx2.ellipse(x, y, 6, 2.6, Math.sin(i) * 0.7, 0, TWO_PI);
+          ctx2.fill();
+        }
+
+        const bowl = ctx2.createLinearGradient(0, 2, 0, 44);
+        bowl.addColorStop(0, '#90caf9');
+        bowl.addColorStop(1, '#1976d2');
+        ctx2.fillStyle = bowl;
+        ctx2.strokeStyle = '#0d47a1';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        ctx2.moveTo(-42, 0);
+        ctx2.quadraticCurveTo(-36, 45, 0, 47);
+        ctx2.quadraticCurveTo(36, 45, 42, 0);
+        ctx2.closePath();
+        ctx2.fill();
+        ctx2.stroke();
+        ctx2.fillStyle = 'rgba(255,255,255,0.42)';
+        ctx2.beginPath();
+        ctx2.ellipse(-14, 20, 10, 5, -0.25, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.restore();
+      }
+
+      function drawBall(ctx2) {
+        shade(ctx2, 0, 43, 38, 8, 0.13);
+        ctx2.save();
+        const ball = ctx2.createRadialGradient(-16, -17, 5, 0, 0, 42);
+        ball.addColorStop(0, '#ffffff');
+        ball.addColorStop(0.17, '#90caf9');
+        ball.addColorStop(0.55, '#42a5f5');
+        ball.addColorStop(1, '#1565c0');
+        ctx2.fillStyle = ball;
+        ctx2.beginPath();
+        ctx2.arc(0, 0, 39, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.save();
+        ctx2.clip();
+        ctx2.strokeStyle = 'rgba(255,255,255,0.82)';
+        ctx2.lineWidth = 7;
+        ctx2.beginPath();
+        ctx2.arc(-23, 0, 43, -1.05, 1.05);
+        ctx2.stroke();
+        ctx2.beginPath();
+        ctx2.arc(23, 0, 43, Math.PI - 1.05, Math.PI + 1.05);
+        ctx2.stroke();
+        ctx2.strokeStyle = 'rgba(13,71,161,0.42)';
+        ctx2.lineWidth = 4;
+        ctx2.beginPath();
+        ctx2.moveTo(-39, 0);
+        ctx2.quadraticCurveTo(0, 12, 39, 0);
+        ctx2.stroke();
+        ctx2.restore();
+
+        ctx2.fillStyle = 'rgba(255,255,255,0.62)';
+        ctx2.beginPath();
+        ctx2.ellipse(-14, -18, 12, 7, -0.5, 0, TWO_PI);
+        ctx2.fill();
+        ctx2.restore();
+      }
+
+      function drawLeaf(ctx2) {
+        shade(ctx2, 0, 43, 40, 8, 0.12);
+        ctx2.save();
+        ctx2.rotate(-0.28);
+        const leaf = ctx2.createLinearGradient(-35, -24, 35, 35);
+        leaf.addColorStop(0, '#cddc39');
+        leaf.addColorStop(0.48, '#8bc34a');
+        leaf.addColorStop(1, '#4e8d2c');
+        ctx2.fillStyle = leaf;
+        ctx2.strokeStyle = '#33691e';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        ctx2.moveTo(-40, 22);
+        ctx2.bezierCurveTo(-34, -28, 18, -48, 43, -7);
+        ctx2.bezierCurveTo(22, 29, -3, 47, -40, 22);
+        ctx2.closePath();
+        ctx2.fill();
+        ctx2.stroke();
+
+        ctx2.strokeStyle = 'rgba(51,105,30,0.75)';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        ctx2.moveTo(-34, 20);
+        ctx2.quadraticCurveTo(2, 6, 38, -8);
+        ctx2.stroke();
+        ctx2.lineWidth = 2;
+        for (let i = -2; i <= 3; i++) {
+          const x = i * 10;
+          ctx2.beginPath();
+          ctx2.moveTo(x, 7 - i * 2);
+          ctx2.lineTo(x + 9, -2 - i * 5);
+          ctx2.stroke();
+        }
+
+        ctx2.fillStyle = 'rgba(255,255,255,0.5)';
+        [[-8, -12], [12, -18], [18, 2]].forEach(([x, y]) => {
+          ctx2.beginPath();
+          ctx2.ellipse(x, y, 4, 8, 0.6, 0, TWO_PI);
+          ctx2.fill();
+        });
+        ctx2.restore();
+      }
+
+      function drawScentTrail(ctx2, time) {
+        const target = state.entities.find(e => e.isTarget);
+        if (!target) return;
+        ctx2.save();
+        ctx2.globalCompositeOperation = 'lighter';
+        for (let i = 0; i < 22; i++) {
+          const t = i / 21;
+          const drift = Math.sin(time * 0.0017 + i * 0.8) * 18;
+          const x = target.x - t * 190 + drift;
+          const y = target.y + Math.sin(time * 0.002 + i) * 28 - t * 32;
+          const alpha = (1 - t) * 0.42;
+          ctx2.fillStyle = `rgba(255, 245, 157, ${alpha})`;
+          ctx2.beginPath();
+          ctx2.arc(x, y, 6 + Math.sin(i) * 2, 0, TWO_PI);
+          ctx2.fill();
+        }
+        ctx2.restore();
+      }
+
+      function drawTemperatureWorld(ctx2, time) {
+        const coolSky = ctx2.createLinearGradient(0, 0, 0, H);
+        coolSky.addColorStop(0, 'rgb(46,46,46)');
+        coolSky.addColorStop(0.72, 'rgb(78,78,78)');
+        coolSky.addColorStop(1, 'rgb(96,96,96)');
+        ctx2.fillStyle = coolSky;
+        ctx2.fillRect(0, 0, W, H);
+
+        ctx2.fillStyle = 'rgb(170,170,170)';
+        ctx2.beginPath();
+        ctx2.arc(655, 94, 52, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.fillStyle = 'rgb(88,88,88)';
+        ctx2.beginPath();
+        ctx2.moveTo(0, 430);
+        ctx2.bezierCurveTo(150, 260, 270, 310, 398, 430);
+        ctx2.lineTo(0, H);
+        ctx2.closePath();
+        ctx2.fill();
+        ctx2.fillStyle = 'rgb(95,95,95)';
+        ctx2.beginPath();
+        ctx2.moveTo(250, 430);
+        ctx2.bezierCurveTo(430, 250, 610, 295, 800, 420);
+        ctx2.lineTo(800, H);
+        ctx2.lineTo(250, H);
+        ctx2.closePath();
+        ctx2.fill();
+
+        ctx2.fillStyle = 'rgb(38,38,38)';
+        ctx2.beginPath();
+        ctx2.ellipse(590, 512, 210, 72, -0.02, 0, TWO_PI);
+        ctx2.fill();
+
+        ctx2.fillStyle = 'rgb(100,100,100)';
+        ctx2.beginPath();
+        ctx2.moveTo(0, 500);
+        ctx2.quadraticCurveTo(200, 462, 410, 500);
+        ctx2.quadraticCurveTo(610, 540, 800, 502);
+        ctx2.lineTo(800, H);
+        ctx2.lineTo(0, H);
+        ctx2.closePath();
+        ctx2.fill();
+
+        ctx2.save();
+        ctx2.filter = 'blur(13px)';
+        for (const ent of state.entities) {
+          const heat = heatForIcon(ent.icon);
+          const grad = ctx2.createRadialGradient(ent.x, ent.y, 0, ent.x, ent.y, ent.radius * 1.35);
+          grad.addColorStop(0, `rgb(${heat},${heat},${heat})`);
+          grad.addColorStop(0.7, `rgb(${Math.max(0, heat - 28)},${Math.max(0, heat - 28)},${Math.max(0, heat - 28)})`);
+          grad.addColorStop(1, 'rgba(70,70,70,0)');
+          ctx2.fillStyle = grad;
+          ctx2.beginPath();
+          ctx2.arc(ent.x, ent.y, ent.radius * 1.35, 0, TWO_PI);
+          ctx2.fill();
+        }
+        ctx2.restore();
+      }
+
+      function heatForIcon(icon) {
+        if (icon === 'mouse') return 245;       // warm mammal
+        if (icon === 'frog') return 95;         // ectotherm: close to surroundings
+        if (icon === 'rice') return 172;        // warm food bowl
+        if (icon === 'sandwich') return 136;
+        if (icon === 'ball') return 112;
+        if (icon === 'flower') return 82;
+        if (icon === 'leaf') return 62;
+        return 100;
+      }
+
+      function drawUVWorld(ctx2, time) {
+        ctx2.fillStyle = 'rgb(12,12,12)';
+        ctx2.fillRect(0, 0, W, H);
+        ctx2.fillStyle = 'rgb(34,34,34)';
+        ctx2.beginPath();
+        ctx2.moveTo(0, 500);
+        ctx2.quadraticCurveTo(200, 462, 410, 500);
+        ctx2.quadraticCurveTo(610, 540, 800, 502);
+        ctx2.lineTo(800, H);
+        ctx2.lineTo(0, H);
+        ctx2.closePath();
+        ctx2.fill();
+
+        for (const ent of state.entities) {
+          if (ent.icon === 'flower') {
+            ctx2.save();
+            ctx2.translate(ent.x, ent.y);
+            ctx2.rotate(ent.angle);
+            ctx2.scale(ent.scale, ent.scale);
+            const pulse = 0.86 + Math.sin(time * 0.004 + ent.seed) * 0.1;
+            ctx2.globalAlpha = ent.isTarget ? 1 : 0.62;
+            ctx2.fillStyle = `rgb(${Math.floor(190 * pulse)},${Math.floor(190 * pulse)},${Math.floor(190 * pulse)})`;
+            for (let i = 0; i < 5; i++) {
+              ctx2.save();
+              ctx2.rotate(i * TWO_PI / 5);
+              ctx2.beginPath();
+              ctx2.ellipse(0, -23, 8, 26, 0, 0, TWO_PI);
+              ctx2.fill();
+              ctx2.restore();
+            }
+            ctx2.fillStyle = 'rgb(255,255,255)';
+            for (let i = 0; i < 5; i++) {
+              ctx2.save();
+              ctx2.rotate(i * TWO_PI / 5 + 0.2);
+              ctx2.beginPath();
+              ctx2.moveTo(0, -3);
+              ctx2.lineTo(6, -35);
+              ctx2.lineTo(-6, -35);
+              ctx2.closePath();
+              ctx2.fill();
+              ctx2.restore();
+            }
+            ctx2.fillStyle = 'rgb(235,235,235)';
+            ctx2.beginPath();
+            ctx2.arc(0, 0, 16, 0, TWO_PI);
+            ctx2.fill();
+            ctx2.restore();
+          }
+        }
+      }
+
+      function buildFishMap() {
+        const total = W * H;
+        const srcR = new Int32Array(total);
+        const srcG = new Int32Array(total);
+        const srcB = new Int32Array(total);
+        const reflect = new Int32Array(total);
+        const outside = new Uint8Array(total);
+        const rim = new Uint8Array(total);
+        const cx = W / 2;
+        const cy = H / 2;
+        const radius = H * 0.44;
+
+        function pixelIndex(x, y) {
+          const xx = Math.max(0, Math.min(W - 1, x | 0));
+          const yy = Math.max(0, Math.min(H - 1, y | 0));
+          return (yy * W + xx) * 4;
+        }
+
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            const p = y * W + x;
+            const dx = x - cx;
+            const dy = y - cy;
+            const r = Math.sqrt(dx * dx + dy * dy);
+            const rn = r / radius;
+            if (rn <= 1) {
+              const theta = Math.atan2(dy, dx);
+              const cos = Math.cos(theta);
+              const sin = Math.sin(theta);
+              const srcRadius = Math.pow(rn, 1.72) * radius;
+              const edge = Math.max(0, (rn - 0.66) / 0.34);
+              const chroma = edge * edge * 5.2;
+              srcR[p] = pixelIndex(cx + cos * (srcRadius + chroma), cy + sin * (srcRadius + chroma));
+              srcG[p] = pixelIndex(cx + cos * srcRadius, cy + sin * srcRadius) + 1;
+              srcB[p] = pixelIndex(cx + cos * (srcRadius - chroma), cy + sin * (srcRadius - chroma)) + 2;
+              rim[p] = clamp((rn - 0.82) * 255 / 0.18, 0, 255);
+            } else {
+              const inv = radius * radius / Math.max(r, 1);
+              const unitX = dx / Math.max(r, 1);
+              const unitY = dy / Math.max(r, 1);
+              const rx = cx + unitX * inv;
+              const ry = cy - unitY * inv;
+              reflect[p] = pixelIndex(rx, ry);
+              outside[p] = clamp((rn - 1) * 210, 0, 255);
+            }
+          }
+        }
+        return { srcR, srcG, srcB, reflect, outside, rim, radius, cx, cy };
+      }
+
+      function applyDogFilter(outCtx = ctx) {
+        const img = baseCtx.getImageData(0, 0, W, H);
+        const d = img.data;
+        for (let i = 0; i < d.length; i += 4) {
+          const r = d[i];
+          const g = d[i + 1];
+          const b = d[i + 2];
+          d[i] = clamp(0.3677 * r + 0.8606 * g - 0.2284 * b);
+          d[i + 1] = clamp(0.2808 * r + 0.6739 * g + 0.0463 * b);
+          d[i + 2] = clamp(-0.0118 * r + 0.0439 * g + 0.9682 * b + 6);
+        }
+        outCtx.putImageData(img, 0, 0);
+        if (state.mode === 'playing') drawDogScentOverlay(outCtx, performance.now());
+      }
+
+      function drawDogScentOverlay(outCtx, time) {
+        if (state.mode !== 'playing') return;
+        const target = state.entities.find(e => e.isTarget);
+        if (!target) return;
+        outCtx.save();
+        outCtx.globalCompositeOperation = 'screen';
+        for (let i = 0; i < 4; i++) {
+          const r = 36 + ((time * 0.06 + i * 38) % 160);
+          const a = 1 - (r - 36) / 160;
+          outCtx.strokeStyle = `rgba(255, 241, 118, ${0.28 * a})`;
+          outCtx.lineWidth = 4;
+          outCtx.beginPath();
+          outCtx.arc(target.x, target.y, r, 0, TWO_PI);
+          outCtx.stroke();
+        }
+        outCtx.restore();
+      }
+
+      function applySnakeFilter(outCtx = ctx, useHeatMap = true) {
+        const visible = baseCtx.getImageData(0, 0, W, H);
+        const heat = useHeatMap ? heatCtx.getImageData(0, 0, W, H).data : visible.data;
+        const d = visible.data;
+        for (let i = 0; i < d.length; i += 4) {
+          const l = useHeatMap
+            ? heat[i]
+            : (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114);
+          const pi = (clamp(l) | 0) * 3;
+          d[i] = snakePalette[pi];
+          d[i + 1] = snakePalette[pi + 1];
+          d[i + 2] = snakePalette[pi + 2];
+        }
+        outCtx.putImageData(visible, 0, 0);
+        outCtx.save();
+        outCtx.globalAlpha = settings.reducedMotion ? 0.09 : 0.16;
+        outCtx.drawImage(baseCanvas, 0, 0);
+        outCtx.restore();
+      }
+
+      function applyBeeFilter(outCtx = ctx, useUVMap = true) {
+        const img = baseCtx.getImageData(0, 0, W, H);
+        const d = img.data;
+        const uv = useUVMap ? uvCtx.getImageData(0, 0, W, H).data : null;
+        const size = currentQuality().beeBlock;
+        for (let by = 0; by < H; by += size) {
+          for (let bx = 0; bx < W; bx += size) {
+            let sr = 0, sg = 0, sb = 0, su = 0, count = 0;
+            for (let y = by; y < Math.min(H, by + size); y++) {
+              let i = (y * W + bx) * 4;
+              for (let x = bx; x < Math.min(W, bx + size); x++, i += 4) {
+                sr += d[i];
+                sg += d[i + 1];
+                sb += d[i + 2];
+                su += uv ? uv[i] : Math.max(0, d[i + 2] * 1.1 + d[i + 1] * 0.25 - d[i] * 0.28);
+                count++;
+              }
+            }
+            const ar = sr / count;
+            const ag = sg / count;
+            const ab = sb / count;
+            const au = su / count;
+            const ro = clamp(ar * 0.045);
+            const go = clamp(ag * 0.62 + au * 0.16);
+            const bo = clamp(ab * 0.58 + au * 1.05);
+            for (let y = by; y < Math.min(H, by + size); y++) {
+              let i = (y * W + bx) * 4;
+              for (let x = bx; x < Math.min(W, bx + size); x++, i += 4) {
+                d[i] = ro;
+                d[i + 1] = go;
+                d[i + 2] = bo;
+              }
+            }
+          }
+        }
+        outCtx.putImageData(img, 0, 0);
+        drawOmmatidiaGrid(outCtx, size);
+      }
+
+      function drawOmmatidiaGrid(outCtx = ctx, s = currentQuality().beeBlock) {
+        outCtx.save();
+        outCtx.globalAlpha = 0.28;
+        outCtx.strokeStyle = '#ffffff';
+        outCtx.lineWidth = 1;
+        for (let y = 0; y <= H; y += s) {
+          outCtx.beginPath();
+          outCtx.moveTo(0, y);
+          outCtx.lineTo(W, y);
+          outCtx.stroke();
+        }
+        for (let x = 0; x <= W; x += s) {
+          outCtx.beginPath();
+          outCtx.moveTo(x, 0);
+          outCtx.lineTo(x, H);
+          outCtx.stroke();
+        }
+        outCtx.restore();
+      }
+
+      function applyFishFilter(time, outCtx = ctx) {
+        const src = baseCtx.getImageData(0, 0, W, H).data;
+        const image = outCtx === cameraCtx ? cameraFishImage : fishImage;
+        const dst = image.data;
+        const total = W * H;
+        const { srcR, srcG, srcB, reflect, outside, rim } = fishMap;
+        for (let p = 0, i = 0; p < total; p++, i += 4) {
+          const out = outside[p];
+          if (out) {
+            const s = reflect[p];
+            const vignette = 1 - out / 380;
+            dst[i] = clamp(src[s] * 0.12 * vignette + 7);
+            dst[i + 1] = clamp(src[s + 1] * 0.32 * vignette + 28);
+            dst[i + 2] = clamp(src[s + 2] * 0.68 * vignette + 72);
+            dst[i + 3] = 255;
+          } else {
+            const rr = rim[p] / 255;
+            dst[i] = clamp(src[srcR[p]] + rr * 26);
+            dst[i + 1] = clamp(src[srcG[p]] + rr * 18);
+            dst[i + 2] = clamp(src[srcB[p]] + rr * 45);
+            dst[i + 3] = 255;
+          }
+        }
+        outCtx.putImageData(image, 0, 0);
+
+        outCtx.save();
+        outCtx.globalCompositeOperation = 'screen';
+        outCtx.strokeStyle = 'rgba(180, 240, 255, 0.58)';
+        outCtx.lineWidth = 8;
+        outCtx.beginPath();
+        outCtx.arc(fishMap.cx, fishMap.cy, fishMap.radius, 0, TWO_PI);
+        outCtx.stroke();
+        outCtx.lineWidth = 2;
+        outCtx.strokeStyle = 'rgba(255, 90, 140, 0.24)';
+        outCtx.beginPath();
+        outCtx.arc(fishMap.cx - 2, fishMap.cy, fishMap.radius + 5, 0, TWO_PI);
+        outCtx.stroke();
+        outCtx.strokeStyle = 'rgba(60, 210, 255, 0.28)';
+        outCtx.beginPath();
+        outCtx.arc(fishMap.cx + 3, fishMap.cy, fishMap.radius - 4, 0, TWO_PI);
+        outCtx.stroke();
+
+        outCtx.globalAlpha = 0.25;
+        outCtx.strokeStyle = '#ffffff';
+        outCtx.lineWidth = 2;
+        const waveCount = settings.reducedMotion ? 2 : 6;
+        for (let k = 0; k < waveCount; k++) {
+          const yy = 70 + k * 88 + Math.sin(time * 0.0015 + k) * 18;
+          outCtx.beginPath();
+          outCtx.moveTo(0, yy);
+          for (let x = 0; x <= W; x += 40) {
+            outCtx.quadraticCurveTo(x + 20, yy + Math.sin(time * 0.002 + x * 0.04 + k) * 14, x + 40, yy);
+          }
+          outCtx.stroke();
+        }
+        outCtx.restore();
+      }
+
+      function drawWormView(time, outCtx = ctx) {
+        outCtx.fillStyle = '#05070d';
+        outCtx.fillRect(0, 0, W, H);
+
+        const target = state.entities.find(e => e.isTarget);
+        if (!target) return;
+
+        const pulse = (time * (settings.reducedMotion ? 0.045 : 0.085)) % 210;
+        outCtx.save();
+        outCtx.globalCompositeOperation = 'lighter';
+        const ringCount = settings.reducedMotion ? 2 : 4;
+        for (let i = 0; i < ringCount; i++) {
+          const radius = (pulse + i * 52) % 210;
+          const alpha = 1 - radius / 210;
+          outCtx.strokeStyle = `rgba(132, 220, 255, ${0.64 * alpha})`;
+          outCtx.lineWidth = 7 - i * 0.9;
+          outCtx.beginPath();
+          outCtx.arc(target.x, target.y, radius, 0, TWO_PI);
+          outCtx.stroke();
+        }
+        const glow = outCtx.createRadialGradient(target.x, target.y, 0, target.x, target.y, 65);
+        glow.addColorStop(0, 'rgba(255,255,255,0.85)');
+        glow.addColorStop(0.2, 'rgba(128,220,255,0.5)');
+        glow.addColorStop(1, 'rgba(0,0,0,0)');
+        outCtx.fillStyle = glow;
+        outCtx.beginPath();
+        outCtx.arc(target.x, target.y, 65, 0, TWO_PI);
+        outCtx.fill();
+        outCtx.restore();
+
+        outCtx.save();
+        outCtx.fillStyle = 'rgba(255,255,255,0.9)';
+        outCtx.font = 'bold 20px system-ui, sans-serif';
+        outCtx.textAlign = 'center';
+        outCtx.fillText('진동 파동을 따라가요', target.x, Math.max(26, target.y - 72));
+        outCtx.restore();
+      }
+
+      function renderAnimalView(outCtx, time, options = {}) {
+        const camera = !!options.camera;
+        if (state.animal === 'human') {
+          outCtx.drawImage(baseCanvas, 0, 0);
+        } else if (state.animal === 'dog') {
+          applyDogFilter(outCtx);
+          if (camera) drawCameraBadge(outCtx, '냄새는 실제 카메라에 없어서 색각만 비교해요');
+        } else if (state.animal === 'snake') {
+          if (!camera) drawTemperatureWorld(heatCtx, time);
+          applySnakeFilter(outCtx, !camera);
+          if (camera) drawCameraBadge(outCtx, '의사 열화상: 실제 적외선 열 카메라가 아니에요');
+        } else if (state.animal === 'bee') {
+          if (!camera) drawUVWorld(uvCtx, time);
+          applyBeeFilter(outCtx, !camera);
+          if (camera) drawCameraBadge(outCtx, 'UV 비유: 화면의 보라색은 약속 색이에요');
+        } else if (state.animal === 'fish') {
+          applyFishFilter(time, outCtx);
+          if (camera) drawCameraBadge(outCtx, '스넬의 창 비유: 수면 굴절을 흉내 냈어요');
+        } else if (state.animal === 'worm') {
+          if (camera) drawCameraWormView(time, outCtx);
+          else drawWormView(time, outCtx);
+        }
+      }
+
+      function drawComparison(outCtx, filtered, rightLabel) {
+        outCtx.clearRect(0, 0, W, H);
+        outCtx.drawImage(baseCanvas, 0, 0, W, H, 0, 0, W / 2, H);
+        outCtx.drawImage(filtered, 0, 0, W, H, W / 2, 0, W / 2, H);
+        outCtx.save();
+        outCtx.fillStyle = 'rgba(0,0,0,0.45)';
+        outCtx.fillRect(W / 2 - 2, 0, 4, H);
+        outCtx.fillStyle = 'rgba(0,0,0,0.45)';
+        roundedRect(outCtx, 16, 16, 150, 36, 18);
+        outCtx.fill();
+        roundedRect(outCtx, W / 2 + 16, 16, 220, 36, 18);
+        outCtx.fill();
+        outCtx.fillStyle = '#fff';
+        outCtx.font = 'bold 17px system-ui, sans-serif';
+        outCtx.textAlign = 'center';
+        outCtx.fillText('👦 사람 눈', 91, 40);
+        outCtx.fillText(rightLabel, W / 2 + 126, 40);
+        outCtx.restore();
+      }
+
+      function renderFrame(time) {
+        if (state.mode !== 'playing') return;
+        if (!shouldRenderThisFrame(time)) {
+          rafId = requestAnimationFrame(renderFrame);
+          return;
+        }
+        const dt = state.lastFrame ? Math.min(60, time - state.lastFrame) : 16.67;
+        state.lastFrame = time;
+
+        if (!state.paused) {
+          updatePhysics(dt);
+          updateParticles(dt);
+        }
+
+        drawWorld(baseCtx, time);
+        if (state.compare && state.animal !== 'human') {
+          renderAnimalView(filteredCtx, time, { camera: false });
+          drawComparison(ctx, filteredCanvas, `${ANIMALS[state.animal].emoji} ${ANIMALS[state.animal].name} 눈`);
+        } else {
+          renderAnimalView(ctx, time, { camera: false });
+        }
+        if (!state.paused) drawParticleLayer();
+        rafId = requestAnimationFrame(renderFrame);
+      }
+
+      function drawCameraFrameToBase() {
+        const video = dom.cameraVideo;
+        if (!video.videoWidth || !video.videoHeight) return false;
+        baseCtx.save();
+        baseCtx.fillStyle = '#061322';
+        baseCtx.fillRect(0, 0, W, H);
+        const vw = video.videoWidth;
+        const vh = video.videoHeight;
+        const scale = Math.max(W / vw, H / vh);
+        const sw = W / scale;
+        const sh = H / scale;
+        const sx = (vw - sw) / 2;
+        const sy = (vh - sh) / 2;
+        baseCtx.drawImage(video, sx, sy, sw, sh, 0, 0, W, H);
+        baseCtx.restore();
+        return true;
+      }
+
+      function drawCameraDemoToBase(time) {
+        const sky = baseCtx.createLinearGradient(0, 0, 0, H);
+        sky.addColorStop(0, '#ffe082');
+        sky.addColorStop(0.45, '#b3e5fc');
+        sky.addColorStop(1, '#c8e6c9');
+        baseCtx.fillStyle = sky;
+        baseCtx.fillRect(0, 0, W, H);
+        baseCtx.save();
+        baseCtx.globalAlpha = 0.95;
+        drawCloud(baseCtx, 135, 88, 0.8);
+        drawCloud(baseCtx, 540, 120, 0.62);
+        baseCtx.restore();
+        baseCtx.fillStyle = '#8bc34a';
+        baseCtx.beginPath();
+        baseCtx.moveTo(0, 480);
+        baseCtx.quadraticCurveTo(220, 420, 410, 495);
+        baseCtx.quadraticCurveTo(640, 560, 800, 485);
+        baseCtx.lineTo(800, H);
+        baseCtx.lineTo(0, H);
+        baseCtx.closePath();
+        baseCtx.fill();
+        const items = [
+          ['flower', 185 + Math.sin(time * 0.001) * 10, 335, 1.1],
+          ['ball', 590 + Math.cos(time * 0.0012) * 18, 382, 1.0],
+          ['sandwich', 385, 302 + Math.sin(time * 0.0014) * 9, 0.95],
+          ['mouse', 660, 465, 0.8],
+          ['leaf', 270, 480, 0.9]
+        ];
+        items.forEach(([icon, x, y, scale]) => {
+          baseCtx.save();
+          baseCtx.translate(x, y);
+          baseCtx.scale(scale, scale);
+          drawIcon(baseCtx, icon, icon === ANIMALS[state.animal].target);
+          baseCtx.restore();
+        });
+        baseCtx.save();
+        baseCtx.fillStyle = 'rgba(0,0,0,0.34)';
+        roundedRect(baseCtx, 24, 22, 345, 42, 21);
+        baseCtx.fill();
+        baseCtx.fillStyle = '#fff';
+        baseCtx.font = 'bold 19px system-ui, sans-serif';
+        baseCtx.textAlign = 'left';
+        baseCtx.fillText('카메라가 없어도 필터를 시험하는 샘플 장면', 42, 50);
+        baseCtx.restore();
+        return true;
+      }
+
+      function drawCameraPlaceholder(outCtx, message) {
+        outCtx.fillStyle = '#061322';
+        outCtx.fillRect(0, 0, W, H);
+        outCtx.fillStyle = 'rgba(255,255,255,0.92)';
+        outCtx.textAlign = 'center';
+        outCtx.font = 'bold 28px system-ui, sans-serif';
+        outCtx.fillText('📷', W / 2, H / 2 - 40);
+        outCtx.font = 'bold 22px system-ui, sans-serif';
+        outCtx.fillText(message, W / 2, H / 2 + 10);
+      }
+
+      function renderCameraFrame(time) {
+        if (state.mode !== 'camera') return;
+        if (!shouldRenderThisFrame(time)) {
+          rafId = requestAnimationFrame(renderCameraFrame);
+          return;
+        }
+        const ready = state.cameraDemo ? drawCameraDemoToBase(time) : drawCameraFrameToBase();
+        if (!ready) {
+          drawCameraPlaceholder(cameraCtx, '카메라 시작 또는 샘플 장면을 선택해 주세요');
+        } else if (state.compare && state.animal !== 'human') {
+          renderAnimalView(filteredCtx, time, { camera: true });
+          drawComparison(cameraCtx, filteredCanvas, `${ANIMALS[state.animal].emoji} ${ANIMALS[state.animal].name} 필터`);
+        } else {
+          renderAnimalView(cameraCtx, time, { camera: true });
+        }
+        rafId = requestAnimationFrame(renderCameraFrame);
+      }
+
+      function drawCameraBadge(outCtx, text) {
+        outCtx.save();
+        outCtx.fillStyle = 'rgba(0,0,0,0.38)';
+        roundedRect(outCtx, 22, H - 54, W - 44, 34, 17);
+        outCtx.fill();
+        outCtx.fillStyle = 'rgba(255,255,255,0.94)';
+        outCtx.font = 'bold 17px system-ui, sans-serif';
+        outCtx.textAlign = 'center';
+        outCtx.fillText(text, W / 2, H - 32);
+        outCtx.restore();
+      }
+
+      function drawCameraWormView(time, outCtx = cameraCtx) {
+        const img = baseCtx.getImageData(0, 0, W, H);
+        const d = img.data;
+        const cell = currentQuality().motionCell;
+        const smallW = Math.floor(W / cell), smallH = Math.floor(H / cell);
+        if (!prevMotionGray || prevMotionGray.length !== smallW * smallH) prevMotionGray = new Uint8Array(smallW * smallH);
+        let sum = 0, sx = 0, sy = 0;
+        for (let gy = 0; gy < smallH; gy++) {
+          for (let gx = 0; gx < smallW; gx++) {
+            const idx = ((gy * cell) * W + gx * cell) * 4;
+            const l = (d[idx] * 0.299 + d[idx + 1] * 0.587 + d[idx + 2] * 0.114) | 0;
+            const p = gy * smallW + gx;
+            const diff = Math.abs(l - prevMotionGray[p]);
+            prevMotionGray[p] = l;
+            if (diff > 18) {
+              sum += diff;
+              sx += gx * cell * diff;
+              sy += gy * cell * diff;
+            }
+          }
+        }
+        if (sum > 12000) {
+          state.motionPulse = { x: sx / sum, y: sy / sum, start: time, strength: clamp(sum / 32000, 0.35, 1) };
+        }
+
+        outCtx.fillStyle = '#05070d';
+        outCtx.fillRect(0, 0, W, H);
+        outCtx.save();
+        outCtx.globalAlpha = 0.11;
+        outCtx.drawImage(baseCanvas, 0, 0);
+        outCtx.restore();
+
+        const pulses = [];
+        if (state.motionPulse) pulses.push(state.motionPulse);
+        pulses.push(...state.manualRipples);
+        state.manualRipples = state.manualRipples.filter(p => time - p.start < 1700);
+
+        outCtx.save();
+        outCtx.globalCompositeOperation = 'lighter';
+        pulses.forEach(p => {
+          const age = time - p.start;
+          if (age < 0 || age > 1900) return;
+          const rings = settings.reducedMotion ? 2 : 4;
+          for (let i = 0; i < rings; i++) {
+            const r = ((age * (settings.reducedMotion ? 0.09 : 0.16)) + i * 48) % 250;
+            const a = (1 - r / 250) * (p.strength || 0.8);
+            outCtx.strokeStyle = `rgba(132,220,255,${0.55 * a})`;
+            outCtx.lineWidth = 6 - i * 0.8;
+            outCtx.beginPath();
+            outCtx.arc(p.x, p.y, r, 0, TWO_PI);
+            outCtx.stroke();
+          }
+        });
+        outCtx.restore();
+        drawCameraBadge(outCtx, '지렁이 비유: 움직임·진동이 있는 곳에 파동이 생겨요');
+      }
+
+      function updatePhysics(dt) {
+        const step = dt / 16.67;
+        const ents = state.entities;
+        for (const e of ents) {
+          e.x += e.vx * step;
+          e.y += e.vy * step;
+          e.angle += e.spin * step;
+
+          if (e.x < e.radius) {
+            e.x = e.radius;
+            e.vx = Math.abs(e.vx);
+          } else if (e.x > W - e.radius) {
+            e.x = W - e.radius;
+            e.vx = -Math.abs(e.vx);
+          }
+          if (e.y < e.radius) {
+            e.y = e.radius;
+            e.vy = Math.abs(e.vy);
+          } else if (e.y > H - e.radius) {
+            e.y = H - e.radius;
+            e.vy = -Math.abs(e.vy);
+          }
+        }
+
+        // Simple equal-mass elastic collision between icons.
+        for (let i = 0; i < ents.length; i++) {
+          for (let j = i + 1; j < ents.length; j++) {
+            const a = ents[i];
+            const b = ents[j];
+            const dx = b.x - a.x;
+            const dy = b.y - a.y;
+            const dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+            const minDist = a.radius + b.radius;
+            if (dist < minDist) {
+              const nx = dx / dist;
+              const ny = dy / dist;
+              const overlap = (minDist - dist) * 0.5;
+              a.x -= nx * overlap;
+              a.y -= ny * overlap;
+              b.x += nx * overlap;
+              b.y += ny * overlap;
+
+              const av = a.vx * nx + a.vy * ny;
+              const bv = b.vx * nx + b.vy * ny;
+              const delta = bv - av;
+              a.vx += delta * nx;
+              a.vy += delta * ny;
+              b.vx -= delta * nx;
+              b.vy -= delta * ny;
+            }
+          }
+        }
+      }
+
+      function spawnRound() {
+        const animal = ANIMALS[state.animal];
+        const targetIcon = animal.target;
+        const decoys = ICONS.filter(icon => icon !== targetIcon);
+        const count = state.animal === 'worm' ? 4 : 6;
+        const ents = [];
+
+        function newEntity(icon, isTarget) {
+          const radius = icon === 'sandwich' ? 56 : (icon === 'frog' ? 52 : 48);
+          let x, y, ok = false, tries = 0;
+          while (!ok && tries++ < 80) {
+            x = rand(radius + 20, W - radius - 20);
+            y = rand(radius + 20, H - radius - 20);
+            ok = ents.every(e => Math.hypot(e.x - x, e.y - y) > e.radius + radius + 26);
+          }
+          const angle = rand(0, TWO_PI);
+          const speed = rand(isTarget ? 2.1 : 1.65, isTarget ? 4.2 : 3.7);
+          return {
+            id: `${Date.now()}-${Math.random()}`,
+            icon,
+            isTarget,
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            spin: rand(-0.018, 0.018),
+            angle: rand(-0.18, 0.18),
+            radius,
+            scale: isTarget ? 1.02 : rand(0.88, 1.0),
+            seed: Math.random() * 99
+          };
+        }
+
+        ents.push(newEntity(targetIcon, true));
+        for (let i = 0; i < count; i++) {
+          const icon = decoys[(i + state.round + Math.floor(Math.random() * decoys.length)) % decoys.length];
+          ents.push(newEntity(icon, false));
+        }
+        state.entities = ents;
+        state.round++;
+        renderMission();
+      }
+
+      function updateParticles(dt) {
+        const step = dt / 16.67;
+        state.particles = state.particles.filter(p => {
+          p.life -= step;
+          p.x += p.vx * step;
+          p.y += p.vy * step;
+          p.vy += 0.13 * step;
+          p.rot += p.spin * step;
+          return p.life > 0;
+        });
+      }
+
+      function addBurst(x, y, correct) {
+        const profile = currentQuality();
+        const baseAmount = correct ? 28 : 16;
+        const amount = Math.max(4, Math.round(baseAmount * profile.particleScale * (settings.reducedMotion ? 0.35 : 1)));
+        for (let i = 0; i < amount; i++) {
+          const a = rand(0, TWO_PI);
+          const speed = rand(correct ? 2.5 : 1.5, correct ? 8.5 : 5.2);
+          state.particles.push({
+            x, y,
+            vx: Math.cos(a) * speed,
+            vy: Math.sin(a) * speed - rand(0, correct ? 4 : 2),
+            life: rand(26, correct ? 52 : 42),
+            maxLife: 52,
+            rot: rand(0, TWO_PI),
+            spin: rand(-0.2, 0.2),
+            correct
+          });
+        }
+      }
+
+      function drawOneParticle(p, x, y) {
+        ctx.save();
+        const alpha = clamp(p.life / p.maxLife, 0, 1);
+        ctx.globalAlpha = alpha;
+        ctx.translate(x, y);
+        ctx.rotate(p.rot);
+        if (p.correct) {
+          ctx.fillStyle = '#fff176';
+          ctx.strokeStyle = '#ff9800';
+          ctx.lineWidth = 2;
+          starPath(ctx, 10, 4, 5);
+          ctx.fill();
+          ctx.stroke();
+        } else {
+          ctx.strokeStyle = '#ff5252';
+          ctx.lineWidth = 6;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(-8, -8);
+          ctx.lineTo(8, 8);
+          ctx.moveTo(8, -8);
+          ctx.lineTo(-8, 8);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawParticleLayer() {
+        for (const p of state.particles) {
+          if (state.compare && state.animal !== 'human') {
+            drawOneParticle(p, p.x / 2, p.y);
+            drawOneParticle(p, W / 2 + p.x / 2, p.y);
+          } else {
+            drawOneParticle(p, p.x, p.y);
+          }
+        }
+      }
+
+      function pointerToGame(ev) {
+        const rect = dom.gameCanvas.getBoundingClientRect();
+        let x = (ev.clientX - rect.left) * W / rect.width;
+        const y = (ev.clientY - rect.top) * H / rect.height;
+        if (state.compare && state.animal !== 'human') {
+          x = x < W / 2 ? x * 2 : (x - W / 2) * 2;
+        }
+        return { x, y };
+      }
+
+      function handlePointerDown(ev) {
+        if (state.mode !== 'playing' || state.paused) return;
+        ev.preventDefault();
+        ensureAudio();
+        const p = pointerToGame(ev);
+        let best = null;
+        let bestDist = Infinity;
+        const hittableEntities = state.animal === 'worm' ? state.entities.filter(e => e.isTarget) : state.entities;
+        for (const ent of hittableEntities) {
+          const d = Math.hypot(ent.x - p.x, ent.y - p.y);
+          if (d < ent.radius + 18 && d < bestDist) {
+            best = ent;
+            bestDist = d;
+          }
+        }
+
+        if (best && best.isTarget) {
+          state.score += 10;
+          updateHud();
+          addBurst(best.x, best.y, true);
+          vibrate([35, 35, 45]);
+          successSound();
+          spawnRound();
+        } else {
+          const x = best ? best.x : p.x;
+          const y = best ? best.y : p.y;
+          if (best && !best.isTarget) {
+            state.entities = state.entities.filter(e => e !== best);
+          }
+          state.timeLeft = Math.max(0, state.timeLeft - (best ? 3 : 1));
+          state.score = Math.max(0, state.score - (best ? 2 : 0));
+          updateHud();
+          addBurst(x, y, false);
+          vibrate(best ? [160, 40, 90] : 90);
+          failSound();
+          if (state.timeLeft <= 0) endGame();
+        }
+      }
+
+      function vibrate(pattern) {
+        if (settings.vibration && 'vibrate' in navigator) navigator.vibrate(pattern);
+      }
+
+      function ensureAudio() {
+        if (audioCtx) return audioCtx;
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        audioCtx = new AC();
+        return audioCtx;
+      }
+
+      function tone(freq, duration, delay = 0, type = 'sine', gainValue = 0.09) {
+        if (!settings.sound) return;
+        const ac = ensureAudio();
+        if (!ac) return;
+        const start = ac.currentTime + delay;
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, start);
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(gainValue, start + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(start);
+        osc.stop(start + duration + 0.02);
+      }
+
+      function successSound() {
+        tone(660, 0.12, 0, 'triangle', 0.08);
+        tone(990, 0.14, 0.12, 'triangle', 0.075);
+        tone(1320, 0.08, 0.23, 'sine', 0.05);
+      }
+
+      function failSound() {
+        if (!settings.sound) return;
+        const ac = ensureAudio();
+        if (!ac) return;
+        const start = ac.currentTime;
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, start);
+        osc.frequency.exponentialRampToValueAtTime(72, start + 0.28);
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.08, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.32);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(start);
+        osc.stop(start + 0.34);
+      }
+
+      function pingSound() {
+        tone(420, 0.08, 0, 'sine', 0.04);
+        tone(620, 0.1, 0.08, 'sine', 0.035);
+      }
+
+      function speak(text) {
+        if (!settings.speech || !('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ko-KR';
+        utter.rate = 0.94;
+        utter.pitch = 1.08;
+        const voices = window.speechSynthesis.getVoices();
+        const koVoice = voices.find(v => /ko|Korean|한국/i.test(v.lang + v.name));
+        if (koVoice) utter.voice = koVoice;
+        window.speechSynthesis.speak(utter);
+      }
+
+      function updateHud() {
+        dom.timerBadge.textContent = `⏳ ${state.timeLeft}초`;
+        dom.scoreBadge.textContent = `⭐ ${state.score}점`;
+        dom.timerBadge.classList.toggle('alert', state.timeLeft <= 10);
+      }
+
+      function renderMission() {
+        const animal = ANIMALS[state.animal];
+        dom.missionName.textContent = ICON_LABEL[animal.target];
+        missionCtx.clearRect(0, 0, 96, 96);
+        missionCtx.save();
+        missionCtx.translate(48, 50);
+        missionCtx.scale(0.86, 0.86);
+        drawIcon(missionCtx, animal.target, true);
+        missionCtx.restore();
+      }
+
+      function setAnimal(id, announce) {
+        state.animal = id;
+        state.explored.add(id);
+        document.querySelectorAll('[data-animal]').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.animal === id);
+        });
+        const animal = ANIMALS[id];
+        dom.tipText.textContent = `${animal.emoji} ${animal.name}: ${animal.short}`;
+        setLive(`${animal.name} 시야를 선택했어요. ${animal.short}`);
+        if (dom.cameraAnimalBadge) dom.cameraAnimalBadge.textContent = `${animal.emoji} ${animal.name}`;
+        updateCameraStatus();
+        renderMission();
+        if (state.mode === 'playing') spawnRound();
+        if (announce) {
+          speak(animal.guide);
+          if (id === 'worm') pingSound();
+        }
+      }
+
+      function buildAnimalButtons(container, compact) {
+        container.innerHTML = '';
+        animalOrder.forEach(id => {
+          const animal = ANIMALS[id];
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'animal-chip';
+          btn.dataset.animal = id;
+          btn.textContent = compact ? `${animal.emoji} ${animal.name}` : `${animal.emoji} ${animal.name} 눈`;
+          btn.addEventListener('click', () => setAnimal(id, true));
+          container.appendChild(btn);
+        });
+      }
+
+      function scheduleCameraScienceNoteHide() {
+        if (!dom.cameraScienceNote) return;
+        dom.cameraScienceNote.classList.remove('note-dismissed');
+        clearTimeout(cameraScienceNoteTimer);
+        cameraScienceNoteTimer = window.setTimeout(() => {
+          if (state.mode === 'camera' && dom.cameraScienceNote) {
+            dom.cameraScienceNote.classList.add('note-dismissed');
+          }
+        }, 30000);
+      }
+
+      function clearCameraScienceNoteTimer() {
+        clearTimeout(cameraScienceNoteTimer);
+        cameraScienceNoteTimer = null;
+      }
+
+      function showScreen(which) {
+        dom.menuScreen.classList.toggle('hidden', which !== 'menu');
+        dom.gameScreen.classList.toggle('hidden', which !== 'game');
+        dom.cameraScreen.classList.toggle('hidden', which !== 'camera');
+        dom.resultScreen.classList.toggle('hidden', which !== 'result');
+        if (which === 'camera') scheduleCameraScienceNoteHide();
+        else clearCameraScienceNoteTimer();
+      }
+
+      function startGame() {
+        stopCamera();
+        ensureAudio();
+        state.mode = 'playing';
+        state.paused = false;
+        state.cameraDemo = false;
+        resetPerf();
+        state.score = 0;
+        state.timeLeft = 50;
+        state.particles = [];
+        state.explored = new Set([state.animal]);
+        state.round = 0;
+        state.lastFrame = 0;
+        showScreen('game');
+        dom.pauseOverlay.classList.add('hidden');
+        dom.pauseBtn.textContent = '⏸ 쉬기';
+        updateHud();
+        setAnimal(state.animal, false);
+        speak(`서후야, 탐험을 시작하자! ${ANIMALS[state.animal].guide}`);
+        clearInterval(timerId);
+        timerId = window.setInterval(() => {
+          if (state.mode !== 'playing' || state.paused) return;
+          state.timeLeft = Math.max(0, state.timeLeft - 1);
+          updateHud();
+          if (state.timeLeft <= 0) endGame();
+        }, 1000);
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(renderFrame);
+      }
+
+      function endGame() {
+        if (state.mode !== 'playing') return;
+        state.mode = 'result';
+        clearInterval(timerId);
+        cancelAnimationFrame(rafId);
+        vibrate([50, 30, 50]);
+        tone(523, 0.12, 0, 'triangle', 0.06);
+        tone(659, 0.12, 0.12, 'triangle', 0.06);
+        tone(784, 0.2, 0.24, 'triangle', 0.06);
+        dom.finalScore.textContent = `${state.score}점`;
+        renderEyeBook();
+        showScreen('result');
+        speak(`탐험 완료! 서후의 점수는 ${state.score}점이야. 비밀 눈 백과사전을 살펴보자.`);
+      }
+
+      function renderEyeBook() {
+        const explored = animalOrder.filter(id => state.explored.has(id));
+        dom.eyeBook.innerHTML = explored.map(id => {
+          const a = ANIMALS[id];
+          return `<article class="eye-card">
+            <h3>${a.emoji} ${a.name}의 감각 카드</h3>
+            <p class="card-row"><span class="label">한 줄</span>${a.kid}</p>
+            <p class="card-row"><span class="label">실제</span>${a.truth}</p>
+            <p class="card-row"><span class="label">앱</span>${a.app}</p>
+            <p class="card-row"><span class="label">생존</span>${a.survival}</p>
+            <p class="card-row"><span class="label">주의</span>${a.caution}</p>
+          </article>`;
+        }).join('');
+      }
+
+      function resetToMenu() {
+        stopCamera();
+        state.mode = 'menu';
+        state.paused = false;
+        state.cameraDemo = false;
+        clearInterval(timerId);
+        cancelAnimationFrame(rafId);
+        dom.cameraConsentModal.classList.add('hidden');
+        dom.settingsModal.classList.add('hidden');
+        showScreen('menu');
+        setAnimal(state.animal, false);
+      }
+
+      function updateCameraStatus(message) {
+        if (!dom.cameraStatus) return;
+        if (message) {
+          dom.cameraStatus.textContent = message;
+          return;
+        }
+        const a = ANIMALS[state.animal];
+        if (state.mode === 'camera') {
+          dom.cameraStatus.textContent = `${a.emoji} ${a.name} 필터: ${a.short}`;
+        }
+      }
+
+      async function startCameraMode() {
+        clearInterval(timerId);
+        cancelAnimationFrame(rafId);
+        state.mode = 'camera';
+        state.paused = false;
+        state.cameraDemo = false;
+        state.lastFrame = 0;
+        state.manualRipples = [];
+        state.motionPulse = null;
+        prevMotionGray = null;
+        resetPerf();
+        showScreen('camera');
+        setAnimal(state.animal, false);
+        drawCameraPlaceholder(cameraCtx, '카메라 시작 또는 샘플 장면을 선택해 주세요');
+        if (settings.cameraConsent) {
+          await startCamera();
+        } else {
+          openCameraConsent();
+        }
+      }
+
+      function openCameraConsent() {
+        dom.cameraConsentModal.classList.remove('hidden');
+        updateCameraStatus('카메라를 켜기 전에 보호자 안내를 확인해 주세요.');
+      }
+
+      function closeCameraConsent() {
+        dom.cameraConsentModal.classList.add('hidden');
+      }
+
+      async function requestCameraWithConsent() {
+        if (!settings.cameraConsent) {
+          openCameraConsent();
+          return;
+        }
+        await startCamera();
+      }
+
+      function explainCameraError(err) {
+        const name = err && err.name ? err.name : 'CameraError';
+        if (!window.isSecureContext && location.hostname !== 'localhost') {
+          return '카메라 기능은 안전한 HTTPS 주소에서만 안정적으로 사용할 수 있어요.';
+        }
+        if (name === 'NotAllowedError' || name === 'PermissionDeniedError') return '카메라 권한이 꺼져 있어요. 브라우저 설정에서 카메라를 허용해 주세요.';
+        if (name === 'NotFoundError' || name === 'DevicesNotFoundError') return '이 기기에서 카메라를 찾을 수 없어요. 샘플 장면으로 필터를 시험할 수 있어요.';
+        if (name === 'NotReadableError' || name === 'TrackStartError') return '다른 앱이 카메라를 사용 중일 수 있어요. 다른 앱을 닫고 다시 시도해 주세요.';
+        if (name === 'OverconstrainedError') return '요청한 카메라 조건이 맞지 않아 기본 카메라로 다시 시도해 볼 수 있어요.';
+        return `카메라를 열 수 없어요: ${name}. 권한, HTTPS 배포, 다른 앱의 카메라 사용 여부를 확인해 주세요.`;
+      }
+
+      function startCameraDemo(message = '카메라 없이 샘플 장면에 동물 눈 필터를 씌워 볼 수 있어요.') {
+        stopCamera(false);
+        state.cameraDemo = true;
+        prevMotionGray = null;
+        updateCameraStatus(message);
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(renderCameraFrame);
+      }
+
+      async function startCamera() {
+        ensureAudio();
+        state.cameraDemo = false;
+        if (!window.isSecureContext && location.hostname !== 'localhost') {
+          updateCameraStatus('카메라 기능은 HTTPS 또는 localhost에서 사용할 수 있어요. 샘플 장면으로 대체했어요.');
+          startCameraDemo('HTTPS가 아니어서 카메라 대신 샘플 장면을 보여줘요.');
+          return;
+        }
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          updateCameraStatus('이 브라우저에서는 카메라 API를 사용할 수 없어요. 샘플 장면으로 대체했어요.');
+          startCameraDemo('카메라 API가 없어 샘플 장면을 보여줘요.');
+          return;
+        }
+        stopCamera(false);
+        try {
+          updateCameraStatus('카메라 권한을 허용해 주세요. 가능하면 후면 카메라를 사용합니다.');
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: {
+              facingMode: { ideal: 'environment' },
+              width: { ideal: 800 },
+              height: { ideal: 600 },
+              frameRate: { ideal: 30, max: 60 }
+            }
+          });
+          if (state.mode !== 'camera') {
+            stream.getTracks().forEach(track => track.stop());
+            return;
+          }
+          cameraStream = stream;
+          dom.cameraVideo.srcObject = stream;
+          await dom.cameraVideo.play();
+          updateCameraStatus();
+          cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(renderCameraFrame);
+          speak('라이브 동물 눈 모드야. 주변을 비추고 동물 버튼을 눌러 보자.');
+        } catch (err) {
+          const message = explainCameraError(err);
+          updateCameraStatus(`${message} 샘플 장면으로 대체했어요.`);
+          startCameraDemo(`${message} 지금은 샘플 장면으로 필터를 볼 수 있어요.`);
+        }
+      }
+
+      function stopCamera(cancelFrame = true) {
+        if (cancelFrame) state.cameraDemo = false;
+        if (cameraStream) {
+          cameraStream.getTracks().forEach(track => track.stop());
+          cameraStream = null;
+        }
+        if (dom.cameraVideo) dom.cameraVideo.srcObject = null;
+        if (cancelFrame) cancelAnimationFrame(rafId);
+      }
+
+      function handleCameraPointer(ev) {
+        if (state.mode !== 'camera') return;
+        ev.preventDefault();
+        ensureAudio();
+        const rect = dom.cameraCanvas.getBoundingClientRect();
+        const x = (ev.clientX - rect.left) * W / rect.width;
+        const y = (ev.clientY - rect.top) * H / rect.height;
+        state.manualRipples.push({ x, y, start: performance.now(), strength: 0.9 });
+        if (state.animal === 'worm') pingSound();
+      }
+
+      function init() {
+        buildAnimalButtons(dom.menuAnimals, false);
+        buildAnimalButtons(dom.animalTabs, true);
+        buildAnimalButtons(dom.cameraAnimalTabs, true);
+        if (dom.versionPill) dom.versionPill.textContent = `Beta ${APP_VERSION}`;
+        applySettingsToUI();
+        updateCompareButtons();
+        resetPerf();
+        setAnimal('human', false);
+        renderMission();
+        updateHud();
+        dom.startBtn.addEventListener('click', startGame);
+        dom.cameraBtn.addEventListener('click', startCameraMode);
+        dom.settingsBtn.addEventListener('click', openSettings);
+        dom.settingsGameBtn.addEventListener('click', openSettings);
+        dom.settingsCameraBtn.addEventListener('click', openSettings);
+        dom.gameHomeBtn.addEventListener('click', resetToMenu);
+        dom.cameraHomeTopBtn.addEventListener('click', resetToMenu);
+        dom.pauseBtn.addEventListener('click', togglePause);
+        dom.muteBtn.addEventListener('click', quickToggleSound);
+        dom.cameraMuteBtn.addEventListener('click', quickToggleSound);
+        dom.compareBtn.addEventListener('click', toggleCompare);
+        dom.cameraCompareBtn.addEventListener('click', toggleCompare);
+        dom.cameraStartBtn.addEventListener('click', requestCameraWithConsent);
+        dom.cameraDemoBtn.addEventListener('click', () => startCameraDemo());
+        dom.cameraStopBtn.addEventListener('click', () => {
+          stopCamera();
+          updateCameraStatus('카메라를 껐어요. 다시 시작하려면 카메라 시작을 눌러 주세요.');
+          drawCameraPlaceholder(cameraCtx, '카메라가 꺼져 있어요');
+        });
+        dom.cameraMenuBtn.addEventListener('click', resetToMenu);
+        dom.retryBtn.addEventListener('click', startGame);
+        dom.menuBtn.addEventListener('click', resetToMenu);
+        dom.cameraConsentAcceptBtn.addEventListener('click', async () => {
+          settings.cameraConsent = true;
+          saveSettings();
+          closeCameraConsent();
+          await startCamera();
+        });
+        dom.cameraConsentDemoBtn.addEventListener('click', () => {
+          closeCameraConsent();
+          startCameraDemo('카메라 권한 없이 샘플 장면으로 동물 눈 필터를 볼 수 있어요.');
+        });
+        dom.cameraConsentCancelBtn.addEventListener('click', () => {
+          closeCameraConsent();
+          updateCameraStatus('카메라를 시작하지 않았어요. 샘플 장면 보기를 누르면 권한 없이 필터를 볼 수 있어요.');
+        });
+        dom.settingsCloseBtn.addEventListener('click', closeSettings);
+        dom.soundSwitch.addEventListener('click', () => toggleSetting('sound'));
+        dom.speechSwitch.addEventListener('click', () => toggleSetting('speech'));
+        dom.vibrationSwitch.addEventListener('click', () => toggleSetting('vibration'));
+        dom.motionSwitch.addEventListener('click', () => toggleSetting('reducedMotion'));
+        dom.largeTextSwitch.addEventListener('click', () => toggleSetting('largeText'));
+        dom.qualitySelect.addEventListener('change', (ev) => {
+          settings.quality = ev.target.value;
+          if (settings.quality !== 'auto') state.perf.level = settings.quality;
+          saveSettings();
+          resetPerf();
+          applySettingsToUI();
+        });
+        dom.settingsModal.addEventListener('click', (ev) => { if (ev.target === dom.settingsModal) closeSettings(); });
+        dom.cameraConsentModal.addEventListener('click', (ev) => { if (ev.target === dom.cameraConsentModal) closeCameraConsent(); });
+        dom.gameCanvas.addEventListener('pointerdown', handlePointerDown, { passive: false });
+        dom.cameraCanvas.addEventListener('pointerdown', handleCameraPointer, { passive: false });
+        window.addEventListener('blur', () => {
+          if (state.mode === 'playing') window.speechSynthesis && window.speechSynthesis.cancel();
+        });
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
