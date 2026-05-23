@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>🐾 동물 시각 탐험대 </title>
+  <title>🐾 나노바나나 동물 시각 탐험대 — AI Simple Beta</title>
   <style>
     :root {
       --glass: rgba(255, 255, 255, 0.68);
@@ -283,12 +283,37 @@
       filter: saturate(1.1);
     }
 
-    .menu-animals, .animal-tabs {
+    .menu-animals {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 8px;
       width: 100%;
+    }
+
+    .animal-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 6px;
+      width: min(100%, 840px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 4px 9px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      scroll-snap-type: x proximity;
+    }
+
+    .animal-tabs::-webkit-scrollbar { display: none; }
+
+    .animal-tabs .animal-chip {
+      flex: 0 0 auto;
+      scroll-snap-align: center;
+    }
+
+    @media (min-width: 760px) {
+      .animal-tabs { justify-content: center; }
     }
 
     .menu-animals { margin-top: 18px; }
@@ -297,6 +322,7 @@
       padding: 9px 14px;
       border-radius: 999px;
       font-size: clamp(0.9rem, 2.8vw, 1.05rem);
+      white-space: nowrap;
       color: #546e7a;
       background: var(--glass-strong);
       box-shadow: 0 5px 0 rgba(144, 164, 174, 0.35), var(--soft-shadow);
@@ -736,8 +762,17 @@
       .badge, .mission-board { min-height: 48px; border-radius: 18px; }
       #missionCanvas { width: 42px; height: 42px; border-radius: 14px; }
       .mission-name { display: none; }
-      .animal-tabs { gap: 5px; }
-      .animal-chip { padding: 7px 9px; }
+      .animal-tabs {
+        gap: 4px;
+        justify-content: flex-start;
+        padding: 1px 2px 7px;
+        margin-inline: -2px;
+      }
+      .animal-chip {
+        padding: 7px 9px;
+        font-size: clamp(0.74rem, 2.6vw, 0.95rem);
+        box-shadow: 0 4px 0 rgba(144, 164, 174, 0.32), var(--soft-shadow);
+      }
       .tip { min-height: 30px; padding: 7px 10px; }
       .survival-mission { grid-template-columns: 1fr; gap: 4px; padding: 8px 10px; }
       .glass-card { border-radius: 26px; }
@@ -750,8 +785,8 @@
     <div class="shell">
       <section id="menuScreen" class="screen">
         <div class="glass-card">
-          <h1 class="title"><button id="settingsBtn" class="title-paw" type="button" aria-label="보호자 설정 열기">🐾</button><span class="title-lines">동물 시각 탐험대</span></h1>
-          <p class="subtitle">동물의 눈으로 세상을 보며 생존 미션을 해결하는 과학 탐험 게임이에요. 이 베타에는 사람·개·고양이를 따뜻한 온기로 표현하는 AI 의사 열화상 실험 모드가 포함되어 있어요.</p>
+          <h1 class="title"><button id="settingsBtn" class="title-paw" type="button" aria-label="보호자 설정 열기">🐾</button><span class="title-lines">나노바나나<br />동물 시각 탐험대</span></h1>
+          <p class="subtitle">서후가 동물의 눈으로 세상을 보며 생존 미션을 해결하는 과학 탐험 게임이에요. 이 베타에는 사람·개·고양이를 따뜻한 온기로 표현하는 AI 의사 열화상 실험 모드가 포함되어 있어요.</p>
           <p class="science-note">※ 이 앱은 동물의 감각을 100% 재현하는 장비가 아니라, 핵심 원리를 어린이가 이해하기 쉽게 바꿔 보여주는 교육용 시뮬레이션입니다.</p>
           <div class="privacy-box"><strong>카메라 안전 안내:</strong> 라이브 동물 눈 모드의 카메라 영상은 저장하지 않고, 서버로 보내지 않으며, 이 기기 안에서만 필터로 바뀝니다. AI 실험 모드는 TensorFlow.js 모델을 불러와 사람·개·고양이만 이 기기 안에서 추정합니다.</div>
           <div id="menuAnimals" class="menu-animals hidden" aria-label="동물 선택" aria-hidden="true"></div>
@@ -826,7 +861,7 @@
         <div class="glass-card result-card">
           <h1 class="title">🔍 탐험 완료!</h1>
           <div id="finalScore" class="score-pill">0점</div>
-          <h2 style="margin:0;color:#2e7d32;">비밀 눈 백과사전</h2>
+          <h2 style="margin:0;color:#2e7d32;">서후의 비밀 눈 백과사전</h2>
           <div id="parentQuestionBox" class="parent-question-box"><strong>오늘 아이에게 물어보세요:</strong> 동물마다 세상을 다르게 보는 이유가 뭘까요?</div>
           <div id="eyeBook" class="eye-book"></div>
           <div class="result-actions">
@@ -880,7 +915,7 @@
     (() => {
       'use strict';
 
-      const APP_VERSION = '0.9.12-ai-mission-beta';
+      const APP_VERSION = '0.9.13-ai-mission-tabs-beta';
       const SETTINGS_KEY = 'nanobanana-eye-settings-v098-aiwarm';
       const DEFAULT_SETTINGS = {
         sound: true,
@@ -3316,7 +3351,7 @@
         dom.pauseBtn.textContent = '⏸ 쉬기';
         updateHud();
         setAnimal(state.animal, false);
-        speak(`탐험을 시작하자! ${ANIMALS[state.animal].guide}`);
+        speak(`서후야, 탐험을 시작하자! ${ANIMALS[state.animal].guide}`);
         clearInterval(timerId);
         timerId = window.setInterval(() => {
           if (state.mode !== 'playing' || state.paused) return;
@@ -3340,7 +3375,7 @@
         dom.finalScore.textContent = `${state.score}점`;
         renderEyeBook();
         showScreen('result');
-        speak(`탐험 완료! 점수는 ${state.score}점이야. 비밀 눈 백과사전을 살펴보자.`);
+        speak(`탐험 완료! 서후의 점수는 ${state.score}점이야. 비밀 눈 백과사전을 살펴보자.`);
       }
 
       function renderEyeBook() {
